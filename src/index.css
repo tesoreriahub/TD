@@ -1,0 +1,18 @@
+/* src/index.css */
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.side-bar-container:last-child{
+  background-color: blue;
+}
