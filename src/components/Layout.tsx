@@ -14,15 +14,15 @@ const Layout: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Header toggleSidebar={toggleSidebar} />
-      <div style={{ display: 'flex', flexGrow: 1 }} className='side-bar-container' >
+      <div style={{ display: 'flex', flexGrow: 1, transition: 'margin-left 0.3s ease' }}>
         <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
         <main
           style={{
             flexGrow: 1,
             padding: '16px',
-            transition: 'margin-left 0.3s',
+            marginLeft: sidebarOpen ? '20px' : '-200px',
+            transition: 'margin-left 0.3s ease',
             marginTop: '100px',
-            position: 'relative',
           }}
         >
           <Outlet />

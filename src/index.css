@@ -12,7 +12,3 @@ main {
   overflow-y: auto;
   transition: margin-left 0.3s ease-in-out;
 }
-
-.side-bar-container:last-child{
-  background-color: blue;
-}

@@ -5,6 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
   open: boolean;
@@ -12,6 +13,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleSidebar }) => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Drawer
       variant="persistent"
@@ -24,17 +27,24 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleSidebar }) => {
         '& .MuiDrawer-paper': {
           width: 240,
           boxSizing: 'border-box',
-          top: '64px', // Altura del Header para que el Sidebar quede debajo
-        },
+          top: '64px',
+          backgroundColor: '#1976d2',
+          color: 'white'
+        }
       }}
     >
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem button component={Link} to="/" sx={{backgroundColor:'white'}}>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={Link} to="/about">
-          <ListItemText primary="About" />
+        <ListItem button component={Link} to="/autodiagnostico">
+          <ListItemText primary="Autodiagnóstico de Seguridad Informática" />
         </ListItem>
+        {isAuthenticated && (
+          <ListItem button component={Link} to="/gestion-conocimiento">
+            <ListItemText primary="Gestión del Conocimiento" />
+          </ListItem>
+        )}
       </List>
     </Drawer>
   );
