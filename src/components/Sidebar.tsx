@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleSidebar }) => {
       }}
     >
       <List>
-        <ListItem button component={Link} to="/" sx={{backgroundColor:'white'}}>
+        <ListItem button component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
         <ListItem button component={Link} to="/autodiagnostico">
