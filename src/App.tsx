@@ -1,6 +1,6 @@
 // src/App.tsx
 import React from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Autodiagnostico from './pages/Autodiagnostico';
@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <Router>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -30,7 +30,7 @@ const App: React.FC = () => {
             />
           </Route>
         </Routes>
-      </Router>
+      </HashRouter>
     </AuthProvider>
   );
 };
