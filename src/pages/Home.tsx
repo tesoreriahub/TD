@@ -7,16 +7,15 @@ const Home: React.FC = () => {
     <Container maxWidth="md" style={{ marginTop: '40px', marginLeft: '-20px'}}>
       <Box textAlign="center">
         <Typography variant="h4" gutterBottom>
-          Desarrollo como Contratista de la Alcaldía de Medellín
+        Quienes somos
         </Typography>
       </Box>
       <Box textAlign="justify" >
         <Typography variant="body1" gutterBottom>
-          Este es un proyecto de desarrollo realizado como parte de un contrato con la Alcaldía de Medellín. 
-          Cabe destacar que esta plataforma no es oficial y no se solicitarán datos personales en ningún momento de la experiencia de usuario.
+        Bienvenido a TesoreriaHub, tu destino principal para la Innovación y la Gestión Tecnológica en datos de la Subsecretaría de Tesorería de la Alcaldia de Medellín. En TesoreriaHub, nos comprometemos a brindar soluciones avanzadas y servicios de vanguardia para aprovechar al máximo el poder de los datos de tu área u organización. Nuestro centro de analítica e innovación se especializa en una variedad de servicios diseñados para ayudarte a tomar decisiones estratégicas e informadas.
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          La información apresentada aquí es únicamente con fines demostrativos y no representa una aplicación oficial de la Alcaldía de Medellín.
+        <Typography variant="body1">
+        Conoce a nuestro equipo
         </Typography>
       </Box>
     </Container>

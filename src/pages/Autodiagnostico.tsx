@@ -1,8 +1,72 @@
-// src/pages/Autodiagnostico.tsx
 import { Alert, Autocomplete, Box, Button, Container, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer } from 'recharts';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import React, { useRef, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Tooltip as RechartsTooltip, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import * as XLSX from 'xlsx';
+interface Recomendacion {
+  texto: string;
+  link: string;
+}
+const recomendaciones:{ [key: string]: Recomendacion[] } = {
+  Autenticación: [
+    { texto: "howsecureismypassword", link: "https://howsecureismypassword.net/" },
+    { texto: "KeePass", link: "https://keepass.info/" },
+    { texto: "Bitwarden", link: "https://bitwarden.com/" },
+    { texto: "Proton", link: "https://proton.me/" },
+    { texto: "2fas", link: "https://2fas.com/" },
+    { texto: "Aegis", link: "https://getaegis.app/" },
+    { texto: "Authenticator", link: "https://authenticator.cc/" }
+  ],
+  "Navegación Web": [
+    { texto: "Mozilla Firefox", link: "https://www.mozilla.org/en-US/firefox/new/" },
+    { texto: "Brave Browser", link: "https://brave.com/" },
+    { texto: "DuckDuckGo", link: "https://duckduckgo.com/" },
+    { texto: "Qwant", link: "https://www.qwant.com/" },
+    { texto: "Whatismybrowser", link: "https://www.whatismybrowser.com/" },
+    { texto: "EFF", link: "https://www.eff.org/" }
+  ],
+  "E-mail": [
+    { texto: "Howtostopemailtracking", link: "https://emailprivacytester.com/" }
+  ],
+  "Mensajeria": [
+    { texto: "Signal", link: "https://signal.org/" }
+  ],
+  "Redes Sociales": [
+    { texto: "Mastodon", link: "https://joinmastodon.org/" },
+    { texto: "PeerTube", link: "https://joinpeertube.org/" },
+    { texto: "dTube", link: "https://d.tube/" }
+  ],
+  Redes: [
+    { texto: "IPFire", link: "https://www.ipfire.org/" }, // Firewalls de código abierto
+    { texto: "pfSense", link: "https://www.pfsense.org/" }, // Seguridad en redes
+    { texto: "Wireshark", link: "https://www.wireshark.org/" } // Análisis de tráfico de red
+  ],
+  "Dispositivos Móviles": [
+    { texto: "GrapheneOS", link: "https://grapheneos.org/" }, // Sistema operativo móvil enfocado en seguridad
+    { texto: "CalyxOS", link: "https://calyxos.org/" }, // Sistema operativo móvil seguro y privado
+    { texto: "Blokada", link: "https://blokada.org/" } // Bloqueador de anuncios y rastreadores para móviles
+  ],
+  "Computadora Personal": [
+    { texto: "Cryptomator", link: "https://cryptomator.org/" },
+    { texto: "Veracrypt", link: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "oo-software", link: "https://www.oo-software.com/en/shutup10" }
+  ],
+  "Smart Home": [
+    { texto: "Home Assistant", link: "https://www.home-assistant.io/" }, // Plataforma de automatización del hogar enfocada en privacidad
+    { texto: "OpenHAB", link: "https://www.openhab.org/" }, // Solución de automatización del hogar open source
+    { texto: "ESET Smart Home", link: "https://www.eset.com/" } // Seguridad para dispositivos del hogar inteligente
+  ],
+  "Finanzas Personales": [
+    { texto: "Privacy", link: "https://privacy.com/" },
+    { texto: "MYSUDO", link: "https://mysudo.com/" }
+  ],
+  "Aspecto Humano": [
+    { texto: "VirusTotal", link: "https://www.virustotal.com/" }
+  ]
+};
+
+
 
 // Función para generar el archivo Excel y permitir la descarga
 const generarExcel = (nombre: string, apellido: string, preguntas: string[], respuestas: string[]) => {
@@ -31,141 +95,142 @@ const Autodiagnostico: React.FC = () => {
       title: 'Autenticación',
       description: 'La mayoría de las violaciones de datos reportadas se deben al uso de contraseñas débiles, predeterminadas o robadas. Utilice contraseñas largas, seguras y únicas, adminístrelas en un administrador de contraseñas seguro, habilite la autenticación de dos factores.',
       questions: [
-        { text: "¿Utiliza una contraseña segura?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Evita reutilizar sus contraseñas?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Utiliza un administrador de contraseñas seguro?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Evita compartir contraseñas?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Habilita la autenticación de 2 factores?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Mantiene seguros los códigos de respaldo?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Utiliza una contraseña segura?", tooltip: "Una contraseña segura debe tener al menos 12 caracteres, incluir letras mayúsculas, minúsculas, números y símbolos." },
+        { text: "¿Evita reutilizar sus contraseñas?", tooltip: "Reutilizar contraseñas en varias cuentas aumenta el riesgo en caso de violación de datos." },
+        { text: "¿Utiliza un administrador de contraseñas seguro?", tooltip: "Un administrador de contraseñas genera y guarda contraseñas seguras y únicas para cada cuenta." },
+        { text: "¿Evita compartir contraseñas?", tooltip: "Compartir contraseñas, incluso con personas de confianza, pone en riesgo su seguridad." },
+        { text: "¿Habilita la autenticación de 2 factores?", tooltip: "La autenticación de dos factores requiere un código adicional, mejorando significativamente la seguridad." },
+        { text: "¿Mantiene seguros los códigos de respaldo?", tooltip: "Los códigos de respaldo le permiten recuperar su cuenta si pierde el acceso a su método de autenticación principal." },
       ],
     },
     {
       title: 'Navegación Web',
-      description: 'La mayoría de los sitios web en Internet utilizan algún tipo de seguimiento, a menudo para obtener información sobre el comportamiento y las preferencias de sus usuarios. Estos datos pueden ser increíblemente detallados y, por lo tanto, son extremadamente valiosos para las organizaciones, gobiernos y los ladrones de propiedad intelectual. Las violaciones y filtraciones de datos son comunes, y desanonimizar la actividad web de los usuarios suele ser una tarea trivial.',
+      description: 'La mayoría de los sitios web en Internet utilizan algún tipo de seguimiento, a menudo para obtener información sobre el comportamiento y las preferencias de sus usuarios. Estos datos pueden ser increíblemente detallados y, por lo tanto, son extremadamente valiosos para las organizaciones, gobiernos y los ladrones de propiedad intelectual.',
       questions: [
-        { text: "¿Bloquea los anuncios?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Se asegura que el sitio web sea legitimo?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Utiliza un navegador que respeta su privacidad?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Utiliza un motor de búsqueda privado?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Elimina complementos innecesarios del navegador?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Mantiene el navegador actualizado?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Comprueba HTTPS?", tooltip: ""},
-        { text: "¿Utiliza modo incógnito?", tooltip: ""},
-        { text: "¿Administra las cookies?", tooltip: ""},
+        { text: "¿Bloquea los anuncios?", tooltip: "Bloquear anuncios ayuda a reducir la cantidad de seguimiento y malware potencial." },
+        { text: "¿Se asegura que el sitio web sea legítimo?", tooltip: "Verifique el dominio, la ortografía y la presencia de HTTPS antes de compartir información." },
+        { text: "¿Utiliza un navegador que respeta su privacidad?", tooltip: "Navegadores enfocados en la privacidad, como Firefox o Brave, reducen el seguimiento y protegen sus datos." },
+        { text: "¿Utiliza un motor de búsqueda privado?", tooltip: "Motores de búsqueda privados como DuckDuckGo no rastrean ni almacenan sus búsquedas." },
+        { text: "¿Elimina complementos innecesarios del navegador?", tooltip: "Los complementos innecesarios pueden ser vulnerables y filtrar datos, elimínelos regularmente." },
+        { text: "¿Mantiene el navegador actualizado?", tooltip: "Las actualizaciones de navegador incluyen parches de seguridad esenciales." },
+        { text: "¿Comprueba HTTPS?", tooltip: "HTTPS cifra la conexión con el sitio web, protegiendo sus datos durante la navegación." },
+        { text: "¿Utiliza modo incógnito?", tooltip: "El modo incógnito reduce el almacenamiento de datos localmente, pero no garantiza privacidad completa." },
+        { text: "¿Administra las cookies?", tooltip: "Las cookies pueden rastrear su actividad, configure su navegador para gestionarlas de manera estricta." },
       ],
     },
     {
       title: 'E-mail',
-      description: 'Si un pirata informático obtiene acceso a sus correos electrónicos, proporciona una puerta de entrada para que sus otras cuentas se vean comprometidas (mediante el restablecimiento de contraseñas), por lo que la seguridad del correo electrónico es primordial para su seguridad digital.',
+      description: 'Si un pirata informático obtiene acceso a sus correos electrónicos, proporciona una puerta de entrada para que sus otras cuentas se vean comprometidas, por lo que la seguridad del correo electrónico es primordial.',
       questions: [
-        { text: "¿Tiene más de una dirección de correo electrónico?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Mantiene privada la dirección de correo electrónico?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Mantiene su cuenta segura?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Deshabilita la carga automática de contenido remoto?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
+        { text: "¿Tiene más de una dirección de correo electrónico?", tooltip: "Tener correos electrónicos separados para trabajo, finanzas y ocio reduce el riesgo de compromiso." },
+        { text: "¿Mantiene privada la dirección de correo electrónico?", tooltip: "Evite compartir su correo personal en sitios públicos o redes sociales." },
+        { text: "¿Mantiene su cuenta segura?", tooltip: "Use contraseñas fuertes y habilite la autenticación de dos factores para su correo electrónico." },
+        { text: "¿Deshabilita la carga automática de contenido remoto?", tooltip: "Desactivar la carga automática de imágenes y contenido remoto evita el seguimiento a través del correo." },
       ],
     },
     {
       title: 'Mensajeria',
       questions: [
-        { text: "¿Utiliza únicamente mensajeros totalmente cifrados de extremo a extremo?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Utiliza únicamente plataformas de mensajería de código abierto?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Utiliza una plataforma de mensajería confiable?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Verifica la configuración de seguridad?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Se asegura de que el entorno de sus destinatarios sea seguro?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Deshabilita los servicios en la nube?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Sus chats grupales son seguros?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Utiliza únicamente mensajeros totalmente cifrados de extremo a extremo?", tooltip: "El cifrado de extremo a extremo asegura que solo usted y su destinatario puedan leer los mensajes." },
+        { text: "¿Utiliza únicamente plataformas de mensajería de código abierto?", tooltip: "Las plataformas de código abierto permiten auditorías de seguridad externas, aumentando la transparencia." },
+        { text: "¿Utiliza una plataforma de mensajería confiable?", tooltip: "Utilice plataformas recomendadas por la comunidad de seguridad, como Signal o Telegram." },
+        { text: "¿Verifica la configuración de seguridad?", tooltip: "Revise y ajuste la configuración de seguridad de su aplicación de mensajería regularmente." },
+        { text: "¿Se asegura de que el entorno de sus destinatarios sea seguro?", tooltip: "Asegúrese de que los dispositivos de sus contactos también sean seguros para evitar compromisos." },
+        { text: "¿Deshabilita los servicios en la nube?", tooltip: "Desactivar las copias de seguridad en la nube protege sus mensajes de posibles filtraciones." },
+        { text: "¿Sus chats grupales son seguros?", tooltip: "Asegúrese de que todos los participantes de los chats grupales también usen cifrado de extremo a extremo." },
       ],
     },
     {
       title: 'Redes Sociales',
-      description: 'Las comunidades en línea existen desde la invención de Internet y brindan a personas de todo el mundo la oportunidad de conectarse, comunicarse y compartir. Aunque estas redes son una excelente manera de promover la interacción social y unir a las personas, eso tiene un lado oscuro: existen algunas preocupaciones serias sobre la privacidad de los servicios de redes sociales, y estos sitios de redes sociales son propiedad de corporaciones privadas y generan ingresos. recopilando datos sobre individuos y vendiéndolos, a menudo a terceros anunciantes. Asegure su cuenta, bloquee su configuración de privacidad, pero sepa que incluso después de hacerlo, todos los datos cargados intencionalmente o no son efectivamente públicos. Si es posible, evite el uso de redes sociales convencionales.',
+      description: 'Las redes sociales pueden comprometer la privacidad si no se configuran correctamente. Es importante que asegure sus cuentas y sea consciente de la cantidad de información que comparte.',
       questions: [
-        { text: "¿Asegura su cuenta?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Verifica la configuración de privacidad?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Piensa en todas las interacciones como públicas?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Piensa en todas las interacciones como permanentes?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Evita revelar demasiado de su vida personal?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Tiene cuidado con lo que sube?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Comparte su correo electrónico y su número de teléfono?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Evita otorgar permisos o conexiones innecesarias?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Evita publicar datos geográficos mientras esté fuera?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Asegura su cuenta?", tooltip: "Utilice contraseñas fuertes y habilite autenticación de dos factores en sus cuentas de redes sociales." },
+        { text: "¿Verifica la configuración de privacidad?", tooltip: "Revise y ajuste las configuraciones de privacidad para limitar el acceso a su información personal." },
+        { text: "¿Piensa en todas las interacciones como públicas?", tooltip: "Considere que todo lo que comparte en línea puede volverse público." },
+        { text: "¿Piensa en todas las interacciones como permanentes?", tooltip: "Incluso si borra una publicación, otros pueden haberla guardado o capturado." },
+        { text: "¿Evita revelar demasiado de su vida personal?", tooltip: "Comparta solo la información necesaria para evitar riesgos de seguridad." },
+        { text: "¿Tiene cuidado con lo que sube?", tooltip: "Evite subir fotos o información que puedan comprometer su seguridad." },
+        { text: "¿Comparte su correo electrónico y su número de teléfono?", tooltip: "Evite publicar información de contacto en redes sociales para reducir el riesgo de spam o phishing." },
+        { text: "¿Evita otorgar permisos o conexiones innecesarias?", tooltip: "Revoque permisos innecesarios a aplicaciones y servicios conectados a sus redes sociales." },
+        { text: "¿Evita publicar datos geográficos mientras esté fuera?", tooltip: "Publicar su ubicación en tiempo real puede comprometer su seguridad personal." },
       ],
     },
     {
       title: 'Redes',
-      description: 'Esta sección cubre cómo conectar sus dispositivos a Internet de forma segura, incluida la configuración de su enrutador y una VPN.',
+      description: 'Conectarse a Internet de forma segura implica proteger su red doméstica y utilizar herramientas como VPN para asegurar su conexión.',
       questions: [
-        { text: "¿Utiliza una VPN?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Cambia la contraseña de su enrutador?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Utiliza WPA2 y una contraseña segura?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Mantiene actualizado el firmware del enrutador?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
+        { text: "¿Utiliza una VPN?", tooltip: "Una VPN cifra su tráfico y protege su privacidad al ocultar su ubicación." },
+        { text: "¿Cambia la contraseña de su enrutador?", tooltip: "Cambie las contraseñas predeterminadas de su enrutador para evitar accesos no autorizados." },
+        { text: "¿Utiliza WPA2 y una contraseña segura?", tooltip: "WPA2 es el estándar de seguridad más seguro para redes Wi-Fi. Use una contraseña compleja." },
+        { text: "¿Mantiene actualizado el firmware del enrutador?", tooltip: "Las actualizaciones de firmware corrigen vulnerabilidades de seguridad en su enrutador." },
       ],
     },
     {
       title: 'Dispositivos Móviles',
-      description: 'Los teléfonos inteligentes han revolucionado muchos aspectos de la vida y han puesto el mundo a nuestro alcance. Para muchos de nosotros, los teléfonos inteligentes son nuestro principal medio de comunicación, entretenimiento y acceso al conocimiento. Pero si bien han llevado la comodidad a un nivel completamente nuevo, suceden algunas cosas indeseadas detrás de la pantalla. El seguimiento geográfico se utiliza para rastrear cada uno de nuestros movimientos y tenemos poco control sobre quién tiene estos datos; su teléfono incluso puede rastrear su ubicación sin GPS. A lo largo de los años, surgieron numerosos informes que describen formas en las que el micrófono de su teléfono puede espiar y la cámara puede observarlo, todo sin su conocimiento o consentimiento. Y luego están las aplicaciones maliciosas, la falta de parches de seguridad y las posibles o probables puertas traseras. El uso de un teléfono inteligente genera una gran cantidad de datos sobre usted, desde información que comparte intencionalmente hasta datos generados silenciosamente a partir de sus acciones. Puede resultar aterrador ver lo que Google, Microsoft, Apple y Facebook saben sobre nosotros; a veces saben más que nuestra familia más cercana. Es difícil comprender qué revelarán sus datos, especialmente en combinación con otros datos. Estos datos se utilizan para mucho más que solo publicidad: más a menudo se utilizan para calificar a las personas en materia de finanzas, seguros y empleo. Los anuncios dirigidos pueden incluso utilizarse para una vigilancia detallada (ver ADINT). A muchos de nosotros nos preocupa cómo los gobiernos recopilan y utilizan los datos de nuestros teléfonos inteligentes y, con razón, las agencias federales a menudo solicitan nuestros datos a Google, Facebook, Apple, Microsoft, Amazon y otras empresas de tecnología. A veces, las solicitudes se realizan de forma masiva y devuelven información detallada sobre todas las personas que se encuentran dentro de una determinada geocerca, a menudo de personas inocentes. Y esto no incluye todo el tráfico de Internet al que las agencias de inteligencia de todo el mundo tienen acceso sin obstáculos.',
+      description: 'Los teléfonos inteligentes generan una gran cantidad de datos sobre usted. Asegúrese de proteger su dispositivo y ser consciente de los permisos que otorga a las aplicaciones.',
       questions: [
-        { text: "¿Cifra su dispositivo?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Desactiva las funciones de conectividad que no se estén utilizando?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Mantiene el recuento de aplicaciones al mínimo?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Evita otorgar permisos a las aplicaciones?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Instala aplicaciones unicamente de fuentes oficiales?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
+        { text: "¿Cifra su dispositivo?", tooltip: "El cifrado del dispositivo protege sus datos en caso de pérdida o robo." },
+        { text: "¿Desactiva las funciones de conectividad que no se estén utilizando?", tooltip: "Desactive Bluetooth, Wi-Fi y NFC cuando no las esté utilizando para reducir riesgos." },
+        { text: "¿Mantiene el recuento de aplicaciones al mínimo?", tooltip: "Instalar solo aplicaciones esenciales reduce las vulnerabilidades en su dispositivo." },
+        { text: "¿Evita otorgar permisos a las aplicaciones?", tooltip: "Revise los permisos solicitados por las aplicaciones y otorgue solo los necesarios." },
+        { text: "¿Instala aplicaciones únicamente de fuentes oficiales?", tooltip: "Descargar aplicaciones solo de tiendas oficiales como Google Play o App Store reduce riesgos de malware." },
       ],
     },
     {
       title: 'Computadora Personal',
-      description: 'Aunque Windows y OS X son fáciles de usar y convenientes, ambos están lejos de ser seguros. Su sistema operativo proporciona la interfaz entre el hardware y sus aplicaciones, por lo que, si se ve comprometido, puede tener efectos perjudiciales',
+      description: 'Es crucial mantener su sistema operativo y aplicaciones actualizadas, además de implementar prácticas de seguridad adicionales como el cifrado y copias de seguridad.',
       questions: [
-        { text: "¿Mantiene su sistema actualizado?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Cifra su dispositivo?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Tiene copia de seguridad de los datos importantes?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Activa el bloqueo de pantalla cuando está inactivo?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Deshabilita asistentes como Siri?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Revisa sus programas instalados?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Administra los permisos?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Apaga su computadora en lugar de ponerla en espera?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Tiene cuidado al conectar dispositivos tipo USB a su computadora?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Mantiene su sistema actualizado?", tooltip: "Las actualizaciones corrigen vulnerabilidades de seguridad en el sistema operativo." },
+        { text: "¿Cifra su dispositivo?", tooltip: "El cifrado protege los datos almacenados en su computadora en caso de pérdida o robo." },
+        { text: "¿Tiene copia de seguridad de los datos importantes?", tooltip: "Realice copias de seguridad regulares de sus archivos más importantes para evitar pérdidas de datos." },
+        { text: "¿Activa el bloqueo de pantalla cuando está inactivo?", tooltip: "Configurar el bloqueo automático de pantalla ayuda a proteger su dispositivo de accesos no autorizados." },
+        { text: "¿Deshabilita asistentes como Siri?", tooltip: "Los asistentes de voz pueden activar funciones de forma accidental y comprometer su privacidad." },
+        { text: "¿Revisa sus programas instalados?", tooltip: "Revise regularmente los programas instalados y elimine aquellos que no utilice." },
+        { text: "¿Administra los permisos?", tooltip: "Revise y gestione los permisos que tienen los programas instalados en su computadora." },
+        { text: "¿Apaga su computadora en lugar de ponerla en espera?", tooltip: "Apagar completamente su computadora reduce riesgos de seguridad relacionados con acceso físico." },
+        { text: "¿Tiene cuidado al conectar dispositivos tipo USB a su computadora?", tooltip: "Evite conectar dispositivos USB desconocidos para prevenir la instalación de malware." },
       ],
     },
     {
       title: 'Smart Home',
-      description: 'Los asistentes domésticos (como Google Home, Alexa y Siri) y otros dispositivos conectados a Internet recopilan grandes cantidades de datos personales (incluidas muestras de voz, datos de ubicación, detalles del hogar y registros de todas las interacciones). Dado que usted tiene un control limitado sobre lo que se recopila, cómo se almacena y para qué se utilizará, esto hace que sea difícil recomendar cualquier producto de consumo para el hogar inteligente a cualquiera que se preocupe por la privacidad y la seguridad. Seguridad versus Privacidad: Hay muchos dispositivos inteligentes en el mercado que afirman aumentar la seguridad de su hogar y al mismo tiempo ser fáciles y convenientes de usar (como alarmas antirrobo inteligentes, cámaras de seguridad para Internet, cerraduras inteligentes y timbres de acceso remoto, por nombrar algunos). Puede parecer que estos dispositivos facilitan la seguridad, pero existe una contrapartida en términos de privacidad: ya que recopilan grandes cantidades de datos personales y le dejan sin control sobre cómo se almacenan o utilizan. La seguridad de estos dispositivos también es cuestionable, ya que muchos de ellos pueden ser (y están siendo) pirateados, lo que permite a un intruso eludir la detección con el mínimo esfuerzo. La opción que más respeta la privacidad sería no utilizar dispositivos inteligentes conectados a Internet en su hogar y no depender de un dispositivo de seguridad que requiera una conexión a Internet. Pero si lo hace, es importante comprender completamente los riesgos de cualquier producto antes de comprarlo. Luego ajuste la configuración para aumentar la privacidad y la seguridad. Las siguientes preguntas le guiarán a mitigar los riesgos asociados con los dispositivos domésticos conectados a Internet.',
+      description: 'Los dispositivos conectados a Internet en su hogar pueden comprometer su privacidad si no se configuran adecuadamente.',
       questions: [
-        { text: "¿Cambia el nombre de los dispositivos para no especificar marca/modelo?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Desactiva el micrófono y la cámara cuando no estén en uso?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Comprende qué datos se recopilan, almacenan y transmiten?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Establece configuraciones de privacidad y opta por no compartir datos con terceros?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Evita vincular tus dispositivos domésticos inteligentes a su identidad real?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Proteje su red?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Cambia el nombre de los dispositivos para no especificar marca/modelo?", tooltip: "Cambiar el nombre predeterminado de los dispositivos dificulta la identificación por atacantes." },
+        { text: "¿Desactiva el micrófono y la cámara cuando no estén en uso?", tooltip: "Desactivar el micrófono y la cámara cuando no los use previene escuchas y grabaciones no autorizadas." },
+        { text: "¿Comprende qué datos se recopilan, almacenan y transmiten?", tooltip: "Lea las políticas de privacidad para saber qué datos recopilan sus dispositivos y cómo se utilizan." },
+        { text: "¿Establece configuraciones de privacidad y opta por no compartir datos con terceros?", tooltip: "Revise las configuraciones de privacidad y desactive el uso compartido de datos si es posible." },
+        { text: "¿Evita vincular sus dispositivos domésticos inteligentes a su identidad real?", tooltip: "Utilice cuentas o alias separados para evitar exponer su identidad real." },
+        { text: "¿Protege su red?", tooltip: "Asegúrese de que su red esté protegida mediante contraseñas seguras y WPA2." },
       ],
     },
     {
       title: 'Finanzas Personales',
-      description: 'El fraude con tarjetas de crédito es la forma más común de robo de identidad (con 133.015 informes en los EE. UU. solo en 2017) y una pérdida total de 905 millones de dólares, lo que representó un aumento del 26% con respecto al año anterior. La cantidad promedio perdida por persona fue de US429 en 2017. Es más importante que nunca tomar medidas básicas para protegerse de ser víctima. Nota sobre las tarjetas de crédito: Las tarjetas de crédito cuentan con métodos tecnológicos para detectar y detener algunas transacciones fraudulentas. Los principales procesadores de pagos implementan esto extrayendo enormes cantidades de datos de los titulares de sus tarjetas, para saber mucho sobre los hábitos de gasto y consumo de cada persona. Estos datos se utilizan para identificar fraudes, pero también se venden a otros intermediarios de datos. Por lo tanto, las tarjetas de crédito son buenas para la seguridad, pero terribles para la privacidad de los datos',
+      description: 'Proteger sus finanzas en línea es esencial para evitar fraudes y robos de identidad.',
       questions: [
-        { text: "¿Esta registrado para recibir alertas de fraude y monitoreo de crédito?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Aplica un congelamiento de crédito?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Utiliza tarjetas virtuales?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Utiliza efectivo para transacciones locales?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Utiliza una dirección de entrega alternativa?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
+        { text: "¿Está registrado para recibir alertas de fraude y monitoreo de crédito?", tooltip: "Las alertas de fraude y monitoreo de crédito le notifican sobre actividad sospechosa." },
+        { text: "¿Aplica un congelamiento de crédito?", tooltip: "Un congelamiento de crédito evita que terceros abran cuentas a su nombre sin su consentimiento." },
+        { text: "¿Utiliza tarjetas virtuales?", tooltip: "Las tarjetas virtuales son temporales y pueden ayudar a reducir el riesgo de fraude en línea." },
+        { text: "¿Utiliza efectivo para transacciones locales?", tooltip: "El uso de efectivo reduce la cantidad de datos financieros que se comparten en línea." },
+        { text: "¿Utiliza una dirección de entrega alternativa?", tooltip: "Utilizar una dirección de entrega distinta de su hogar para compras en línea puede proteger su privacidad." },
       ],
     },
     {
       title: 'Aspecto Humano',
-      description: 'Muchas filtraciones, hackeos y ataques de datos son causados ​por errores humanos. Las siguientes preguntas contiene los aspectos básicos para validar el riesgo de que esto le suceda. Muchas de ellas son de sentido común, pero vale la pena tomar nota de ellas',
+      description: 'Muchos ataques cibernéticos ocurren debido a errores humanos. Estas preguntas lo ayudarán a evaluar su nivel de riesgo personal.',
       questions: [
-        { text: "¿Verifica los destinatarios?", tooltip: "Una contraseña segura debe tener al menos 8 caracteres, incluir letras, números y símbolos." },
-        { text: "¿Nunca deja sus dispositivos desatendidos?", tooltip: "Es importante que cada cuenta tenga una contraseña única." },
-        { text: "¿Esta alerta de la Cam-fectación?", tooltip: "Un administrador de contraseñas ayuda a gestionar contraseñas únicas y seguras." },
-        { text: "¿Esta alerta del Shoulder Surfing?", tooltip: "Compartir contraseñas puede poner en riesgo la seguridad de su cuenta." },
-        { text: "¿Esta alerta de los ataques de Phising?", tooltip: "Habilitar la autenticación de dos factores añade una capa adicional de seguridad." },
-        { text: "¿Esta alerta del Stalkerware?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Instala software de fuentes confiables?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Almacena sus datos de forma segura?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
-        { text: "¿Oculta sus detalles personales de los documentos?", tooltip: "Guarde los códigos de respaldo en un lugar seguro para acceder a sus cuentas en caso de emergencia." },
+        { text: "¿Verifica los destinatarios?", tooltip: "Siempre verifique que los destinatarios de correos y mensajes sean los correctos para evitar compartir datos sensibles." },
+        { text: "¿Nunca deja sus dispositivos desatendidos?", tooltip: "Dejar dispositivos sin supervisión aumenta el riesgo de que personas no autorizadas accedan a ellos." },
+        { text: "¿Está alerta de la Cam-fectación?", tooltip: "La cam-fectación es el acceso remoto no autorizado a la cámara de su dispositivo." },
+        { text: "¿Está alerta del Shoulder Surfing?", tooltip: "El shoulder surfing ocurre cuando alguien observa lo que hace en su dispositivo sin su conocimiento." },
+        { text: "¿Está alerta de los ataques de Phishing?", tooltip: "Los ataques de phishing son intentos de obtener información personal a través de correos o mensajes engañosos." },
+        { text: "¿Está alerta del Stalkerware?", tooltip: "El stalkerware es software diseñado para espiar a alguien sin su consentimiento." },
+        { text: "¿Instala software de fuentes confiables?", tooltip: "Instalar software solo de fuentes confiables reduce el riesgo de malware." },
+        { text: "¿Almacena sus datos de forma segura?", tooltip: "Utilice cifrado y almacenamiento seguro para proteger sus datos personales y sensibles." },
+        { text: "¿Oculta sus detalles personales de los documentos?", tooltip: "Antes de compartir documentos, asegúrese de que no contengan información personal no necesaria." },
       ],
     },
   ];
+
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [answers, setAnswers] = useState(Array(sections.length).fill(null).map((_, i) => Array(sections[i].questions.length).fill('')));
@@ -175,6 +240,13 @@ const Autodiagnostico: React.FC = () => {
 
 
   const options = ["Sí", "No"];
+
+  const resultRef = useRef<HTMLDivElement>(null); // Ref para capturar la sección de resultados
+
+
+  const isSectionComplete = (sectionIndex: number) => {
+    return !answers[sectionIndex].includes(''); // Si alguna respuesta está vacía, el módulo no está completo
+  };
 
   const handleChange = (index: number, value: string | null) => {
     const newAnswers = [...answers];
@@ -212,6 +284,64 @@ const Autodiagnostico: React.FC = () => {
         fullMark: section.questions.length,
       };
     });
+  };
+
+  const handleSectionSelect = (event: React.SyntheticEvent, newValue: number) => {
+    // Solo permitir cambiar de sección si la anterior está completa
+    if (newValue <= currentSection || isSectionComplete(currentSection)) {
+      setCurrentSection(newValue);
+    } else {
+      setShowAlert(true);
+    }
+  };
+
+  const calculatePercentages = () => {
+    return sections.map((section, secIndex) => {
+      const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer === "Sí" ? acc + 1 : acc), 0);
+      const totalQuestions = section.questions.length;
+      const percentage = (correctAnswers / totalQuestions) * 100;
+
+      return {
+        section: section.title,
+        percentage: percentage.toFixed(2), // Convertir a porcentaje con 2 decimales
+        correctAnswers,
+        totalQuestions,
+      };
+    });
+  };
+
+  const generatePDF = () => {
+    const input = resultRef.current;
+    if (input) {
+      html2canvas(input, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+  
+        // Agrega la primera página con la imagen
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+  
+        // Agrega páginas adicionales si el contenido es más alto que una página A4
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+  
+        pdf.save(`${name}_${surname}_Resultados.pdf`);
+      });
+    }
+  };
+  
+
+  const shouldShowRecomendations = (percentages: { percentage: string }[]) => {
+    return percentages.some(p => parseFloat(p.percentage) < 50); // Si hay alguna sección con menos del 50% de respuestas correctas
   };
 
  return (
@@ -306,7 +436,7 @@ const Autodiagnostico: React.FC = () => {
         <Box>
           <Tabs
             value={currentSection}
-            onChange={(e, newValue) => setCurrentSection(newValue)}
+            onChange={handleSectionSelect}
             indicatorColor="primary"
             textColor="primary"
             variant="scrollable"
@@ -314,9 +444,13 @@ const Autodiagnostico: React.FC = () => {
             aria-label="Secciones de la encuesta"
           >
             {sections.map((section, index) => (
-              <Tab label={section.title} key={index} />
-            ))}
-          </Tabs>
+              <Tab
+              label={section.title}
+              key={index}
+              disabled={index > currentSection && !isSectionComplete(index - 1)} // Deshabilitar si la sección anterior no está completa
+            />
+          ))}
+        </Tabs>
 
           <Typography variant="h4" gutterBottom style={{ marginTop: '20px' }}>
             {sections[currentSection].title}
@@ -381,9 +515,11 @@ const Autodiagnostico: React.FC = () => {
           </Box>
         </Box>
       ) : (
-        <Box>
+        <Box ref={resultRef}>
           <Typography variant="h4" gutterBottom>
             Resultados del Autodiagnóstico de {name} {surname}
+          </Typography>
+          <Typography variant="h4" gutterBottom>
           </Typography>
           <ResponsiveContainer width="100%" height={400}>
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={calculateResults()}>
@@ -393,6 +529,49 @@ const Autodiagnostico: React.FC = () => {
               <Radar name="Puntuación" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
             </RadarChart>
           </ResponsiveContainer>
+          <Typography variant="h4" gutterBottom>
+            Porcentaje de respuestas correctas
+          </Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={calculatePercentages()}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="section" />
+              <YAxis />
+              <RechartsTooltip />
+              <Bar dataKey="percentage" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+
+          {shouldShowRecomendations(calculatePercentages()) && (
+            <Box marginTop={4}>
+              <Typography variant="h5" gutterBottom>
+                Recomendaciones
+              </Typography>
+              {calculatePercentages().map((sectionResult, index) => {
+                if (parseFloat(sectionResult.percentage) < 50) {
+                  return (
+                    <Box key={index} marginBottom={2}>
+                      <Typography variant="h6">
+                        {sectionResult.section} ({sectionResult.percentage}%)
+                      </Typography>
+                      <ul>
+                        {recomendaciones[sectionResult.section]?.map((rec: Recomendacion, i: number) => (
+                          <li key={i}>
+                            <Typography variant="body1">
+                              <a href={rec.link} target="_blank" rel="noopener noreferrer">
+                                {rec.texto}
+                              </a>
+                            </Typography>
+                          </li>
+                        )) || <Typography variant="body1">Por recomendar</Typography>}
+                      </ul>
+                    </Box>
+                  );
+                }
+                return null;
+              })}
+            </Box>
+          )}
 
           {/* Botón para generar el archivo Excel */}
           <Button
@@ -407,6 +586,14 @@ const Autodiagnostico: React.FC = () => {
             style={{ marginTop: '20px' }}
           >
             Generar Respuestas en Excel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={generatePDF}  // Llamada a la función para generar el PDF
+            style={{ marginTop: '20px', marginLeft: '10px' }}
+          >
+            Descargar Resultados en PDF
           </Button>
         </Box>
       )}
