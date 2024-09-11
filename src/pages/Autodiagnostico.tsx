@@ -367,7 +367,7 @@ const Autodiagnostico: React.FC = () => {
             Créditos
           </Typography>
           <Typography variant="body2" paragraph>
-            Desarrollado por Julián Uribe - julian.uribe@medellin.gov.co
+            Desarrollado por Alejandro Salgar  - alejandro.salgar@medellin.gov.co
           </Typography>
           <Typography variant="body2" paragraph>
             Supervisado por Jorge Iván Brand Ortíz - Subsecretaria de Tesoreria - Secretaria de Hacienda

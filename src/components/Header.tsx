@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Desarrollos Tesorería
+          Desarrollos
         </Typography>
         {isAuthenticated ? (
           <Button color="inherit" onClick={handleLogout}>
