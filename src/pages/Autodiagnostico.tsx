@@ -228,6 +228,7 @@ const Autodiagnostico: React.FC = () => {
 
 
   const resultRef = useRef<HTMLDivElement>(null); // Ref para capturar la sección de resultados
+  
 
 
   const isSectionComplete = (sectionIndex: number) => {
@@ -288,15 +289,38 @@ const Autodiagnostico: React.FC = () => {
       const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
       const totalQuestions = section.questions.length;
       const percentage = (correctAnswers / totalQuestions) * 100;
-
+  
       return {
         section: section.title,
         percentage: percentage.toFixed(2),
         correctAnswers,
         totalQuestions,
       };
-    });
+    }).sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage)); // Ordena de mayor a menor porcentaje
   };
+
+  const calculateMeanPercentage = () => {
+    const percentages = calculatePercentages();
+    const totalPercentage = percentages.reduce((acc, item) => acc + parseFloat(item.percentage), 0);
+    return totalPercentage / percentages.length;
+  };
+  
+  const getClassification = (meanPercentage: number) => {
+    if (meanPercentage <= 25) {
+      return "Novato ingenuo";
+    } else if (meanPercentage <= 50) {
+      return "Examinador tradicional";
+    } else if (meanPercentage <= 75) {
+      return "Inconformista flexible";
+    } else {
+      return "Colaborador confiable";
+    }
+  };
+
+  const meanPercentage = calculateMeanPercentage();
+  const classification = getClassification(meanPercentage);
+
+  
 
   const generatePDF = () => {
     const input = resultRef.current;
@@ -400,14 +424,15 @@ const Autodiagnostico: React.FC = () => {
               Seleccione una unidad
             </MenuItem>
             <MenuItem value="Control y riesgos">Control y riesgos</MenuItem>
-            <MenuItem value="inversiones">inversiones</MenuItem>
-            <MenuItem value="caja">caja</MenuItem>
-            <MenuItem value="caja - pagos">caja - pagos</MenuItem>
-            <MenuItem value="caja - recaudos">caja - recaudos</MenuItem>
-            <MenuItem value="cobranza - coactivo">cobranza - coactivo</MenuItem>
-            <MenuItem value="cobranza - fp">cobranza - fp</MenuItem>
-            <MenuItem value="cobranza - concursales">cobranza - concursales</MenuItem>
-            <MenuItem value="cobranza - persuasivo">cobranza - persuasivo</MenuItem>
+            <MenuItem value="Inversiones">inversiones</MenuItem>
+            <MenuItem value="Caja">caja</MenuItem>
+            <MenuItem value="Caja - pagos">Caja - pagos</MenuItem>
+            <MenuItem value="Caja - recaudos">Caja - recaudos</MenuItem>
+            <MenuItem value="Cobranza - coactivo">Cobranza - coactivo</MenuItem>
+            <MenuItem value="Cobranza - fp">Cobranza - fp</MenuItem>
+            <MenuItem value="Cobranza - concursales">cobranza - concursales</MenuItem>
+            <MenuItem value="Cobranza - persuasivo">cobranza - persuasivo</MenuItem>
+            <MenuItem value="Despacho">Despacho</MenuItem>
           </Select>
           {showAlert && (
             <Alert severity="warning" onClose={() => setShowAlert(false)}>
@@ -523,6 +548,9 @@ const Autodiagnostico: React.FC = () => {
           <Typography variant="h4" gutterBottom>
             Resultados del Autodiagnóstico de {name} {surname}
           </Typography>
+          <Typography variant="h5" gutterBottom>
+            Clasificación: {classification} ({meanPercentage.toFixed(2)}%)
+          </Typography>
           <Typography variant="h4" gutterBottom>
           </Typography>
           <ResponsiveContainer width="100%" height={400}>
@@ -553,7 +581,7 @@ const Autodiagnostico: React.FC = () => {
                 Recomendaciones
               </Typography>
               {calculatePercentages().map((sectionResult, index) => {
-                if (parseFloat(sectionResult.percentage) < 50) {
+                if (parseFloat(sectionResult.percentage) < 70) { // Recomendaciones para secciones con menos de 70%
                   return (
                     <Box key={index} marginBottom={2}>
                       <Typography variant="h6">
