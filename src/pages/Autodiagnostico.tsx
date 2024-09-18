@@ -27,7 +27,7 @@ const recomendaciones:{ [key: string]: Recomendacion[] } = {
     { texto: "Whatismybrowser", link: "https://www.whatismybrowser.com/" },
     { texto: "EFF", link: "https://www.eff.org/" }
   ],
-  "correo electronico": [
+  "Correo electrónico": [
     { texto: "Howtostopemailtracking", link: "https://emailprivacytester.com/" }
   ],
   "Aplicaciones de mensajería": [
