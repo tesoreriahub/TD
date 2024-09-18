@@ -1,9 +1,10 @@
-import { Alert, Autocomplete, Box, Button, Container, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Checkbox, Container, FormControlLabel, MenuItem, Select, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import React, { useRef, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Tooltip as RechartsTooltip, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import * as XLSX from 'xlsx';
+
 interface Recomendacion {
   texto: string;
   link: string;
@@ -26,10 +27,10 @@ const recomendaciones:{ [key: string]: Recomendacion[] } = {
     { texto: "Whatismybrowser", link: "https://www.whatismybrowser.com/" },
     { texto: "EFF", link: "https://www.eff.org/" }
   ],
-  "E-mail": [
+  "correo electronico": [
     { texto: "Howtostopemailtracking", link: "https://emailprivacytester.com/" }
   ],
-  "Mensajeria": [
+  "Aplicaciones de mensajería": [
     { texto: "Signal", link: "https://signal.org/" }
   ],
   "Redes Sociales": [
@@ -37,31 +38,26 @@ const recomendaciones:{ [key: string]: Recomendacion[] } = {
     { texto: "PeerTube", link: "https://joinpeertube.org/" },
     { texto: "dTube", link: "https://d.tube/" }
   ],
-  Redes: [
-    { texto: "IPFire", link: "https://www.ipfire.org/" }, // Firewalls de código abierto
-    { texto: "pfSense", link: "https://www.pfsense.org/" }, // Seguridad en redes
-    { texto: "Wireshark", link: "https://www.wireshark.org/" } // Análisis de tráfico de red
-  ],
   "Dispositivos Móviles": [
     { texto: "GrapheneOS", link: "https://grapheneos.org/" }, // Sistema operativo móvil enfocado en seguridad
     { texto: "CalyxOS", link: "https://calyxos.org/" }, // Sistema operativo móvil seguro y privado
     { texto: "Blokada", link: "https://blokada.org/" } // Bloqueador de anuncios y rastreadores para móviles
   ],
-  "Computadora Personal": [
+  "Equipos de cómputo": [
     { texto: "Cryptomator", link: "https://cryptomator.org/" },
     { texto: "Veracrypt", link: "https://www.veracrypt.fr/en/Home.html" },
     { texto: "oo-software", link: "https://www.oo-software.com/en/shutup10" }
   ],
-  "Smart Home": [
+  "Dispositivos Domóticos": [
     { texto: "Home Assistant", link: "https://www.home-assistant.io/" }, // Plataforma de automatización del hogar enfocada en privacidad
     { texto: "OpenHAB", link: "https://www.openhab.org/" }, // Solución de automatización del hogar open source
     { texto: "ESET Smart Home", link: "https://www.eset.com/" } // Seguridad para dispositivos del hogar inteligente
   ],
-  "Finanzas Personales": [
+  "Buenas prácticas financieras": [
     { texto: "Privacy", link: "https://privacy.com/" },
     { texto: "MYSUDO", link: "https://mysudo.com/" }
   ],
-  "Aspecto Humano": [
+  "Otras Amenazas latentes": [
     { texto: "VirusTotal", link: "https://www.virustotal.com/" }
   ]
 };
@@ -69,7 +65,8 @@ const recomendaciones:{ [key: string]: Recomendacion[] } = {
 
 
 // Función para generar el archivo Excel y permitir la descarga
-const generarExcel = (nombre: string, apellido: string, preguntas: string[], respuestas: string[]) => {
+
+const generarExcel = (nombre: string, apellido: string, unidad: string, preguntas: string[], respuestas: string[]) => {
   // Crear una hoja de cálculo con preguntas y respuestas
   const data = preguntas.map((pregunta, index) => ({
     Pregunta: pregunta,
@@ -84,7 +81,7 @@ const generarExcel = (nombre: string, apellido: string, preguntas: string[], res
   XLSX.utils.book_append_sheet(libro, hoja, 'Resultados');
 
   // Generar archivo Excel y guardarlo
-  const nombreArchivo = `${nombre}_${apellido}.xls`;
+  const nombreArchivo = `${nombre}_${apellido}_${unidad}.xls`;
   XLSX.writeFile(libro, nombreArchivo);
 };
 
@@ -95,151 +92,140 @@ const Autodiagnostico: React.FC = () => {
       title: 'Autenticación',
       description: 'La mayoría de las violaciones de datos reportadas se deben al uso de contraseñas débiles, predeterminadas o robadas. Utilice contraseñas largas, seguras y únicas, adminístrelas en un administrador de contraseñas seguro, habilite la autenticación de dos factores.',
       questions: [
-        { text: "¿Utiliza una contraseña segura?", tooltip: "Una contraseña segura debe tener al menos 12 caracteres, incluir letras mayúsculas, minúsculas, números y símbolos." },
-        { text: "¿Evita reutilizar sus contraseñas?", tooltip: "Reutilizar contraseñas en varias cuentas aumenta el riesgo en caso de violación de datos." },
-        { text: "¿Utiliza un administrador de contraseñas seguro?", tooltip: "Un administrador de contraseñas genera y guarda contraseñas seguras y únicas para cada cuenta." },
-        { text: "¿Evita compartir contraseñas?", tooltip: "Compartir contraseñas, incluso con personas de confianza, pone en riesgo su seguridad." },
-        { text: "¿Habilita la autenticación de 2 factores?", tooltip: "La autenticación de dos factores requiere un código adicional, mejorando significativamente la seguridad." },
-        { text: "¿Mantiene seguros los códigos de respaldo?", tooltip: "Los códigos de respaldo le permiten recuperar su cuenta si pierde el acceso a su método de autenticación principal." },
+        { text: "Establezco contraseñas seguras de mínimo 9 caracteres que incorporan mayúsculas, minúsculas, números y caracteres especiales", tooltip: "Establecer contraseñas con estos requisitos dificulta su descifrado por atacantes." },
+        { text: "Cuando están disponibles, habilito los métodos de doble factor de autenticación, reconocimiento facial o huella", tooltip: "Estos métodos añaden una capa adicional de seguridad, evitando accesos no autorizados." },
+        { text: "Evito reutilizar mis contraseñas entre diferentes aplicaciones o usar contraseñas predeterminadas de aplicaciones o dispositivos", tooltip: "El uso de contraseñas únicas reduce el riesgo de comprometer múltiples cuentas si una es vulnerada." },
+        { text: "Utilizo un administrador de contraseñas seguro y evito guardar mis contraseñas en navegadores, notas físicas o notas digitales", tooltip: "Un administrador de contraseñas genera y almacena contraseñas de manera segura." },
+        { text: "Evito compartir mis contraseñas con otras personas, las mantengo de uso personal", tooltip: "Compartir contraseñas aumenta el riesgo de accesos no autorizados a sus cuentas." },
+        { text: "Reviso regularmente la actividad de inicio de sesión de mis cuentas y cierro las sesiones luego de usarlas", tooltip: "Revisar la actividad ayuda a identificar accesos sospechosos o no autorizados a tiempo." },
+        { text: "Mantengo actualizada la información de recuperación de mi cuenta", tooltip: "Esto garantiza que pueda recuperar el acceso en caso de olvido o pérdida de credenciales." },
       ],
     },
     {
       title: 'Navegación Web',
-      description: 'La mayoría de los sitios web en Internet utilizan algún tipo de seguimiento, a menudo para obtener información sobre el comportamiento y las preferencias de sus usuarios. Estos datos pueden ser increíblemente detallados y, por lo tanto, son extremadamente valiosos para las organizaciones, gobiernos y los ladrones de propiedad intelectual.',
+      description: 'La mayoría de los sitios web utilizan algún tipo de seguimiento, lo que puede comprometer la privacidad. Es importante ser consciente de la seguridad al navegar por Internet.',
       questions: [
-        { text: "¿Bloquea los anuncios?", tooltip: "Bloquear anuncios ayuda a reducir la cantidad de seguimiento y malware potencial." },
-        { text: "¿Se asegura que el sitio web sea legítimo?", tooltip: "Verifique el dominio, la ortografía y la presencia de HTTPS antes de compartir información." },
-        { text: "¿Utiliza un navegador que respeta su privacidad?", tooltip: "Navegadores enfocados en la privacidad, como Firefox o Brave, reducen el seguimiento y protegen sus datos." },
-        { text: "¿Utiliza un motor de búsqueda privado?", tooltip: "Motores de búsqueda privados como DuckDuckGo no rastrean ni almacenan sus búsquedas." },
-        { text: "¿Elimina complementos innecesarios del navegador?", tooltip: "Los complementos innecesarios pueden ser vulnerables y filtrar datos, elimínelos regularmente." },
-        { text: "¿Mantiene el navegador actualizado?", tooltip: "Las actualizaciones de navegador incluyen parches de seguridad esenciales." },
-        { text: "¿Comprueba HTTPS?", tooltip: "HTTPS cifra la conexión con el sitio web, protegiendo sus datos durante la navegación." },
-        { text: "¿Utiliza modo incógnito?", tooltip: "El modo incógnito reduce el almacenamiento de datos localmente, pero no garantiza privacidad completa." },
-        { text: "¿Administra las cookies?", tooltip: "Las cookies pueden rastrear su actividad, configure su navegador para gestionarlas de manera estricta." },
+        { text: "Compruebo que los sitios sean legítimos y usen HTTPS", tooltip: "HTTPS asegura la conexión cifrada entre el navegador y el servidor, protegiendo la información." },
+        { text: "Prefiero digitar la URL de las aplicaciones web en lugar de encontrarlas en un motor de búsqueda", tooltip: "Escribir directamente la URL reduce el riesgo de caer en sitios web fraudulentos." },
+        { text: "Evito descargar archivos de páginas web de dudosa reputación", tooltip: "Descargar archivos de fuentes no confiables puede introducir malware en su dispositivo." },
+        { text: "Mantengo mi navegador actualizado, bloqueo anuncios y desactivo complementos o plugins en desuso.", tooltip: "Estas prácticas reducen las vulnerabilidades y mejoran la seguridad del navegador." },
+        { text: "Evito guardar contraseñas de aplicaciones críticas en mi navegador", tooltip: "Guardar contraseñas en navegadores puede exponerlas si el navegador es comprometido." },
+        { text: "Utilizo el modo incógnito para separar la navegación abierta en Internet de mi navegación en aplicaciones protegidas", tooltip: "El modo incógnito no almacena el historial ni las cookies, pero no garantiza privacidad completa." },
+        { text: "Cuando me lo solicitan, reviso y gestiono los permisos de sitios web tales como acceso a cookies, ubicación, micrófono, cámara, etc.", tooltip: "Revisar y gestionar los permisos evita que los sitios web accedan a datos sin autorización." },
+        { text: "Hago un uso prudente de las redes Wi-Fi públicas evitando hacer transacciones o ingresar credenciales de mis servicios", tooltip: "Las redes Wi-Fi públicas son vulnerables a ataques y pueden comprometer sus datos." },
       ],
     },
     {
-      title: 'E-mail',
-      description: 'Si un pirata informático obtiene acceso a sus correos electrónicos, proporciona una puerta de entrada para que sus otras cuentas se vean comprometidas, por lo que la seguridad del correo electrónico es primordial.',
+      title: 'Correo electrónico',
+      description: 'La seguridad del correo electrónico es esencial para proteger otras cuentas asociadas. Un correo electrónico comprometido puede permitir acceso no autorizado a múltiples servicios.',
       questions: [
-        { text: "¿Tiene más de una dirección de correo electrónico?", tooltip: "Tener correos electrónicos separados para trabajo, finanzas y ocio reduce el riesgo de compromiso." },
-        { text: "¿Mantiene privada la dirección de correo electrónico?", tooltip: "Evite compartir su correo personal en sitios públicos o redes sociales." },
-        { text: "¿Mantiene su cuenta segura?", tooltip: "Use contraseñas fuertes y habilite la autenticación de dos factores para su correo electrónico." },
-        { text: "¿Deshabilita la carga automática de contenido remoto?", tooltip: "Desactivar la carga automática de imágenes y contenido remoto evita el seguimiento a través del correo." },
+        { text: "Verifico la autenticidad de los remitentes antes de responder o proporcionar información confidencial", tooltip: "Verificar el remitente ayuda a evitar ataques de phishing." },
+        { text: "Evito hacer clic en enlaces sospechosos o descargar archivos de correos electrónicos de dudosa procedencia", tooltip: "Enlaces y archivos en correos no solicitados pueden contener malware o estafas." },
+        { text: "Verifico y autorizo actualizaciones de mi software de correo electrónico para protegerme contra vulnerabilidades", tooltip: "Mantener el software actualizado ayuda a prevenir vulnerabilidades." },
+        { text: "Marco como spam a aquellos correos electrónicos que incluyen contenido inapropiado o de dudosa procedencia", tooltip: "Marcar como spam reduce la exposición a correos maliciosos o no deseados." },
+        { text: "Verifico los destinatarios de mis correos electrónicos antes de enviar con información confidencial", tooltip: "Revisar los destinatarios evita enviar información sensible a personas equivocadas." },
       ],
     },
     {
-      title: 'Mensajeria',
+      title: 'Aplicaciones de mensajería',
       questions: [
-        { text: "¿Utiliza únicamente mensajeros totalmente cifrados de extremo a extremo?", tooltip: "El cifrado de extremo a extremo asegura que solo usted y su destinatario puedan leer los mensajes." },
-        { text: "¿Utiliza únicamente plataformas de mensajería de código abierto?", tooltip: "Las plataformas de código abierto permiten auditorías de seguridad externas, aumentando la transparencia." },
-        { text: "¿Utiliza una plataforma de mensajería confiable?", tooltip: "Utilice plataformas recomendadas por la comunidad de seguridad, como Signal o Telegram." },
-        { text: "¿Verifica la configuración de seguridad?", tooltip: "Revise y ajuste la configuración de seguridad de su aplicación de mensajería regularmente." },
-        { text: "¿Se asegura de que el entorno de sus destinatarios sea seguro?", tooltip: "Asegúrese de que los dispositivos de sus contactos también sean seguros para evitar compromisos." },
-        { text: "¿Deshabilita los servicios en la nube?", tooltip: "Desactivar las copias de seguridad en la nube protege sus mensajes de posibles filtraciones." },
-        { text: "¿Sus chats grupales son seguros?", tooltip: "Asegúrese de que todos los participantes de los chats grupales también usen cifrado de extremo a extremo." },
+        { text: "Utilizo una plataforma de mensajería de buena reputación", tooltip: "El cifrado de extremo a extremo protege sus mensajes contra accesos no autorizados." },
+        { text: "Evito dejar abiertas sesiones de mis servicios de mensajería en dispositivos de uso compartido", tooltip: "Cerrar sesiones en dispositivos compartidos evita accesos no deseados." },
+        { text: "Tengo cuidado antes de hacer click en enlaces que recibo por medio de chats.", tooltip: "Enlaces maliciosos enviados por chat pueden comprometer su dispositivo o datos." },
+        { text: "Mantengo actualizadas mis aplicaciones de mensajería para protegerlas contra vulnerabilidades", tooltip: "Las actualizaciones corrigen vulnerabilidades y mejoran la seguridad." },
+        { text: "Realizo copias de seguridad de mis datos importantes", tooltip: "Hacer copias de seguridad protege contra la pérdida de datos en caso de fallos o ataques." },
+        { text: "Evito enviar datos sensibles como contraseñas o archivos confidenciales por medio de chats", tooltip: "Enviar datos sensibles por chat aumenta el riesgo de que sean interceptados." },
+        { text: "Comparto información pertinente solo en grupos donde reconozco a los destinatarios", tooltip: "Verificar los miembros del grupo evita compartir información con personas no deseadas." },
       ],
     },
     {
       title: 'Redes Sociales',
-      description: 'Las redes sociales pueden comprometer la privacidad si no se configuran correctamente. Es importante que asegure sus cuentas y sea consciente de la cantidad de información que comparte.',
+      description: 'Es importante proteger la información personal en redes sociales configurando adecuadamente la privacidad y siendo consciente de lo que se comparte.',
       questions: [
-        { text: "¿Asegura su cuenta?", tooltip: "Utilice contraseñas fuertes y habilite autenticación de dos factores en sus cuentas de redes sociales." },
-        { text: "¿Verifica la configuración de privacidad?", tooltip: "Revise y ajuste las configuraciones de privacidad para limitar el acceso a su información personal." },
-        { text: "¿Piensa en todas las interacciones como públicas?", tooltip: "Considere que todo lo que comparte en línea puede volverse público." },
-        { text: "¿Piensa en todas las interacciones como permanentes?", tooltip: "Incluso si borra una publicación, otros pueden haberla guardado o capturado." },
-        { text: "¿Evita revelar demasiado de su vida personal?", tooltip: "Comparta solo la información necesaria para evitar riesgos de seguridad." },
-        { text: "¿Tiene cuidado con lo que sube?", tooltip: "Evite subir fotos o información que puedan comprometer su seguridad." },
-        { text: "¿Comparte su correo electrónico y su número de teléfono?", tooltip: "Evite publicar información de contacto en redes sociales para reducir el riesgo de spam o phishing." },
-        { text: "¿Evita otorgar permisos o conexiones innecesarias?", tooltip: "Revoque permisos innecesarios a aplicaciones y servicios conectados a sus redes sociales." },
-        { text: "¿Evita publicar datos geográficos mientras esté fuera?", tooltip: "Publicar su ubicación en tiempo real puede comprometer su seguridad personal." },
-      ],
-    },
-    {
-      title: 'Redes',
-      description: 'Conectarse a Internet de forma segura implica proteger su red doméstica y utilizar herramientas como VPN para asegurar su conexión.',
-      questions: [
-        { text: "¿Utiliza una VPN?", tooltip: "Una VPN cifra su tráfico y protege su privacidad al ocultar su ubicación." },
-        { text: "¿Cambia la contraseña de su enrutador?", tooltip: "Cambie las contraseñas predeterminadas de su enrutador para evitar accesos no autorizados." },
-        { text: "¿Utiliza WPA2 y una contraseña segura?", tooltip: "WPA2 es el estándar de seguridad más seguro para redes Wi-Fi. Use una contraseña compleja." },
-        { text: "¿Mantiene actualizado el firmware del enrutador?", tooltip: "Las actualizaciones de firmware corrigen vulnerabilidades de seguridad en su enrutador." },
+        { text: "Mantengo conciencia del alcance público o privado de mis publicaciones", tooltip: "Ajustar la privacidad de sus publicaciones ayuda a proteger su información." },
+        { text: "Evito revelar demasiado de mi vida o datos personales como teléfono y correo electrónico", tooltip: "Compartir demasiada información puede ser aprovechado por ciberdelincuentes." },
+        { text: "Evito publicar datos geográficos mientras estoy fuera de casa", tooltip: "Evitar publicaciones geográficas en tiempo real reduce el riesgo de robo o acoso." },
+        { text: "Verifico la autenticidad de las solicitudes de información personal antes de responder", tooltip: "Verificar solicitudes evita ser víctima de suplantación o estafas." },
+        { text: "Evito participar en encuestas o concursos que soliciten información personal innecesaria", tooltip: "Evitar compartir información en encuestas reduce el riesgo de robo de identidad." },
       ],
     },
     {
       title: 'Dispositivos Móviles',
-      description: 'Los teléfonos inteligentes generan una gran cantidad de datos sobre usted. Asegúrese de proteger su dispositivo y ser consciente de los permisos que otorga a las aplicaciones.',
+      description: 'Los dispositivos móviles generan una gran cantidad de datos, por lo que es fundamental protegerlos adecuadamente.',
       questions: [
-        { text: "¿Cifra su dispositivo?", tooltip: "El cifrado del dispositivo protege sus datos en caso de pérdida o robo." },
-        { text: "¿Desactiva las funciones de conectividad que no se estén utilizando?", tooltip: "Desactive Bluetooth, Wi-Fi y NFC cuando no las esté utilizando para reducir riesgos." },
-        { text: "¿Mantiene el recuento de aplicaciones al mínimo?", tooltip: "Instalar solo aplicaciones esenciales reduce las vulnerabilidades en su dispositivo." },
-        { text: "¿Evita otorgar permisos a las aplicaciones?", tooltip: "Revise los permisos solicitados por las aplicaciones y otorgue solo los necesarios." },
-        { text: "¿Instala aplicaciones únicamente de fuentes oficiales?", tooltip: "Descargar aplicaciones solo de tiendas oficiales como Google Play o App Store reduce riesgos de malware." },
+        { text: "Configuro opciones para localización del teléfono ante robo o hurto", tooltip: "Configurar opciones de localización facilita recuperar el dispositivo en caso de pérdida o robo." },
+        { text: "Elimino aplicaciones que ya no utilizo para reducir el riesgo de vulnerabilidades", tooltip: "Eliminar aplicaciones no utilizadas minimiza posibles vectores de ataque." },
+        { text: "Instalo solo aplicaciones de fuentes oficiales, verifico los permisos que solicita y reviso las reseñas antes de la instalación.", tooltip: "Instalar aplicaciones solo de fuentes confiables reduce el riesgo de malware." },
+        { text: "Actualizo regularmente el sistema operativo y las aplicaciones", tooltip: "Las actualizaciones incluyen mejoras de seguridad para evitar vulnerabilidades." },
+        { text: "Tengo instalado un antivirus en mi teléfono", tooltip: "El antivirus protege su dispositivo de malware y otras amenazas." },
+        { text: "Realizo copias de seguridad periódicas de mis datos", tooltip: "Hacer copias de seguridad regularmente protege sus datos en caso de pérdida." },
+        { text: "Configuro el dispositivo para que se bloquee automáticamente después de un período de inactividad", tooltip: "El bloqueo automático previene accesos no autorizados si el dispositivo se deja desatendido." },
       ],
     },
     {
-      title: 'Computadora Personal',
+      title: 'Equipos de cómputo',
       description: 'Es crucial mantener su sistema operativo y aplicaciones actualizadas, además de implementar prácticas de seguridad adicionales como el cifrado y copias de seguridad.',
       questions: [
-        { text: "¿Mantiene su sistema actualizado?", tooltip: "Las actualizaciones corrigen vulnerabilidades de seguridad en el sistema operativo." },
-        { text: "¿Cifra su dispositivo?", tooltip: "El cifrado protege los datos almacenados en su computadora en caso de pérdida o robo." },
-        { text: "¿Tiene copia de seguridad de los datos importantes?", tooltip: "Realice copias de seguridad regulares de sus archivos más importantes para evitar pérdidas de datos." },
-        { text: "¿Activa el bloqueo de pantalla cuando está inactivo?", tooltip: "Configurar el bloqueo automático de pantalla ayuda a proteger su dispositivo de accesos no autorizados." },
-        { text: "¿Deshabilita asistentes como Siri?", tooltip: "Los asistentes de voz pueden activar funciones de forma accidental y comprometer su privacidad." },
-        { text: "¿Revisa sus programas instalados?", tooltip: "Revise regularmente los programas instalados y elimine aquellos que no utilice." },
-        { text: "¿Administra los permisos?", tooltip: "Revise y gestione los permisos que tienen los programas instalados en su computadora." },
-        { text: "¿Apaga su computadora en lugar de ponerla en espera?", tooltip: "Apagar completamente su computadora reduce riesgos de seguridad relacionados con acceso físico." },
-        { text: "¿Tiene cuidado al conectar dispositivos tipo USB a su computadora?", tooltip: "Evite conectar dispositivos USB desconocidos para prevenir la instalación de malware." },
+        { text: "Promuevo que mi sistema operativo esté actualizado", tooltip: "Mantener el sistema operativo actualizado protege contra vulnerabilidades conocidas." },
+        { text: "Me intereso por tener el cifrado de disco duro habilitado", tooltip: "El cifrado de disco asegura que los datos no puedan ser leídos sin autorización." },
+        { text: "Tengo copia de seguridad de mis datos importantes", tooltip: "Las copias de seguridad protegen sus datos en caso de fallos o ataques." },
+        { text: "Me intereso por el bloqueo de pantalla cuando está inactivo", tooltip: "El bloqueo de pantalla impide accesos no autorizados cuando se deja el equipo desatendido." },
+        { text: "Verifico la eliminación de los archivos o programas que no utilizo", tooltip: "Eliminar archivos y programas innecesarios reduce la superficie de ataque." },
+        { text: "Evito conectar dispositivos tipo USB no confiables o no autorizados", tooltip: "Los dispositivos USB pueden ser vectores de malware, evite conectar dispositivos no verificados." },
+        { text: "Verifico la instalación de un software antivirus actualizado", tooltip: "El antivirus actualizado protege contra malware y otras amenazas en tiempo real." },
+        { text: "Verifico que el firewall esté activo para proteger mi red y dispositivos", tooltip: "El firewall controla las conexiones entrantes y salientes, protegiendo contra accesos no autorizados." },
+        { text: "Hago auditorías regulares de los permisos y accesos a mis archivos y carpetas", tooltip: "Revisar permisos previene accesos indebidos a archivos sensibles o importantes." },
       ],
     },
     {
-      title: 'Smart Home',
+      title: 'Dispositivos Domóticos',
       description: 'Los dispositivos conectados a Internet en su hogar pueden comprometer su privacidad si no se configuran adecuadamente.',
       questions: [
-        { text: "¿Cambia el nombre de los dispositivos para no especificar marca/modelo?", tooltip: "Cambiar el nombre predeterminado de los dispositivos dificulta la identificación por atacantes." },
-        { text: "¿Desactiva el micrófono y la cámara cuando no estén en uso?", tooltip: "Desactivar el micrófono y la cámara cuando no los use previene escuchas y grabaciones no autorizadas." },
-        { text: "¿Comprende qué datos se recopilan, almacenan y transmiten?", tooltip: "Lea las políticas de privacidad para saber qué datos recopilan sus dispositivos y cómo se utilizan." },
-        { text: "¿Establece configuraciones de privacidad y opta por no compartir datos con terceros?", tooltip: "Revise las configuraciones de privacidad y desactive el uso compartido de datos si es posible." },
-        { text: "¿Evita vincular sus dispositivos domésticos inteligentes a su identidad real?", tooltip: "Utilice cuentas o alias separados para evitar exponer su identidad real." },
-        { text: "¿Protege su red?", tooltip: "Asegúrese de que su red esté protegida mediante contraseñas seguras y WPA2." },
+        { text: "Cambio el nombre de los dispositivos por un nombre que no revele información personal o marcas/modelos.", tooltip: "Renombrar dispositivos dificulta que sean identificados y atacados fácilmente." },
+        { text: "Comprendo qué datos se recopilan, almacenan y transmiten en los dispositivos inteligentes que utilizo", tooltip: "Entender la recopilación de datos ayuda a proteger su privacidad y evitar abusos." },
+        { text: "Establezco configuraciones de privacidad y decido no compartir datos con terceros", tooltip: "Configurar la privacidad correctamente previene el acceso no autorizado a sus datos personales." },
+        { text: "Actualizo regularmente el software de mis dispositivos domóticos", tooltip: "Las actualizaciones corrigen vulnerabilidades que podrían ser explotadas por atacantes." },
+        { text: "Reviso y ajusto las configuraciones de privacidad de mis dispositivos domóticos según las recomendaciones de seguridad", tooltip: "Revisar y ajustar la configuración de privacidad mejora la protección de datos sensibles." },
       ],
     },
     {
-      title: 'Finanzas Personales',
+      title: 'Buenas prácticas financieras',
       description: 'Proteger sus finanzas en línea es esencial para evitar fraudes y robos de identidad.',
       questions: [
-        { text: "¿Está registrado para recibir alertas de fraude y monitoreo de crédito?", tooltip: "Las alertas de fraude y monitoreo de crédito le notifican sobre actividad sospechosa." },
-        { text: "¿Aplica un congelamiento de crédito?", tooltip: "Un congelamiento de crédito evita que terceros abran cuentas a su nombre sin su consentimiento." },
-        { text: "¿Utiliza tarjetas virtuales?", tooltip: "Las tarjetas virtuales son temporales y pueden ayudar a reducir el riesgo de fraude en línea." },
-        { text: "¿Utiliza efectivo para transacciones locales?", tooltip: "El uso de efectivo reduce la cantidad de datos financieros que se comparten en línea." },
-        { text: "¿Utiliza una dirección de entrega alternativa?", tooltip: "Utilizar una dirección de entrega distinta de su hogar para compras en línea puede proteger su privacidad." },
+        { text: "Tengo activas y estoy atento a las notificaciones sobre mis movimientos y transacciones", tooltip: "Recibir notificaciones en tiempo real permite detectar rápidamente actividades sospechosas." },
+        { text: "Tengo activa una clave dinámica o un token", tooltip: "El uso de claves dinámicas o tokens añade una capa adicional de seguridad en las transacciones financieras." },
+        { text: "Verifico la legitimidad de las plataformas de pago y comercios electrónicos", tooltip: "Comprar solo en plataformas legítimas reduce el riesgo de fraudes y robos de información." },
+        { text: "Protejo la información de mi tarjeta cuando realizo pagos en algún comercio", tooltip: "Proteger los datos de la tarjeta evita que sean interceptados durante las transacciones." },
+        { text: "Reviso con regularidad los saldos de mis cuentas", tooltip: "Monitorear el saldo ayuda a identificar transacciones no autorizadas rápidamente." },
+        { text: "Evito hacer transacciones financieras en redes públicas", tooltip: "Las redes públicas pueden ser vulnerables a ataques, comprometiendo la seguridad de sus datos financieros." },
+        { text: "Desactivo servicios o configuraciones de auto-completar en aplicaciones financieras", tooltip: "Desactivar el autocompletado evita que información sensible sea introducida automáticamente en lugares inseguros." },
       ],
     },
     {
-      title: 'Aspecto Humano',
+      title: 'Otras Amenazas latentes',
       description: 'Muchos ataques cibernéticos ocurren debido a errores humanos. Estas preguntas lo ayudarán a evaluar su nivel de riesgo personal.',
       questions: [
-        { text: "¿Verifica los destinatarios?", tooltip: "Siempre verifique que los destinatarios de correos y mensajes sean los correctos para evitar compartir datos sensibles." },
-        { text: "¿Nunca deja sus dispositivos desatendidos?", tooltip: "Dejar dispositivos sin supervisión aumenta el riesgo de que personas no autorizadas accedan a ellos." },
-        { text: "¿Está alerta de la Cam-fectación?", tooltip: "La cam-fectación es el acceso remoto no autorizado a la cámara de su dispositivo." },
-        { text: "¿Está alerta del Shoulder Surfing?", tooltip: "El shoulder surfing ocurre cuando alguien observa lo que hace en su dispositivo sin su conocimiento." },
-        { text: "¿Está alerta de los ataques de Phishing?", tooltip: "Los ataques de phishing son intentos de obtener información personal a través de correos o mensajes engañosos." },
-        { text: "¿Está alerta del Stalkerware?", tooltip: "El stalkerware es software diseñado para espiar a alguien sin su consentimiento." },
-        { text: "¿Instala software de fuentes confiables?", tooltip: "Instalar software solo de fuentes confiables reduce el riesgo de malware." },
-        { text: "¿Almacena sus datos de forma segura?", tooltip: "Utilice cifrado y almacenamiento seguro para proteger sus datos personales y sensibles." },
-        { text: "¿Oculta sus detalles personales de los documentos?", tooltip: "Antes de compartir documentos, asegúrese de que no contengan información personal no necesaria." },
+        { text: "Protejo mis datos personales al revisar el consentimiento otorgado a aplicaciones y servicios", tooltip: "Revisar los consentimientos otorgados evita que aplicaciones recolecten más información de la necesaria." },
+        { text: "Realizo una revisión periódica de las configuraciones de privacidad y seguridad en mis aplicaciones y dispositivos", tooltip: "Revisar las configuraciones de privacidad asegura que sus datos estén bien protegidos." },
+        { text: "Entiendo qué es y evito ser víctima del shoulder surfing.", tooltip: "El shoulder surfing es cuando alguien observa su pantalla sin su conocimiento para obtener información confidencial." },
+        { text: "Entiendo qué son y estoy alerta ante ataques de phishing", tooltip: "Los ataques de phishing buscan engañarlo para que comparta datos sensibles o descargue malware." },
+        { text: "Entiendo qué es y estoy alerta al stalkerware", tooltip: "El stalkerware es software diseñado para espiar sus actividades sin su consentimiento." },
+        { text: "Entiendo qué es y estoy alerta al malware", tooltip: "El malware puede comprometer sus dispositivos, robar información o controlar sus sistemas sin su permiso." },
+        { text: "Estoy alerta de los ataques de ransomware", tooltip: "El ransomware cifra sus archivos y pide un rescate para devolver el acceso, por lo que es importante protegerse." },
+        { text: "Entiendo qué son y estoy alerta ante estafas de soporte técnico y/o vishing", tooltip: "Las estafas de soporte técnico buscan engañar para robar datos o instalar malware mediante llamadas fraudulentas." },
+        { text: "Entiendo qué son y estoy alerta de los ataques de ingeniería social", tooltip: "La ingeniería social manipula a las personas para que divulguen información confidencial o realicen acciones peligrosas." },
       ],
     },
   ];
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [answers, setAnswers] = useState(Array(sections.length).fill(null).map((_, i) => Array(sections[i].questions.length).fill('')));
+  const [unidad, setUnidad] = useState('');
+  const [answers, setAnswers] = useState(Array(sections.length).fill(null).map((_, i) => Array(sections[i].questions.length).fill(false)));
   const [currentSection, setCurrentSection] = useState(-1); // -1 es el estado inicial para pedir nombre y apellido
   const [showResults, setShowResults] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-
-  const options = ["Sí", "No"];
 
   const resultRef = useRef<HTMLDivElement>(null); // Ref para capturar la sección de resultados
 
@@ -248,9 +234,9 @@ const Autodiagnostico: React.FC = () => {
     return !answers[sectionIndex].includes(''); // Si alguna respuesta está vacía, el módulo no está completo
   };
 
-  const handleChange = (index: number, value: string | null) => {
+  const handleChange = (index: number, checked: boolean) => {
     const newAnswers = [...answers];
-    newAnswers[currentSection][index] = value || '';
+    newAnswers[currentSection][index] = checked;
     setAnswers(newAnswers);
   };
 
@@ -259,6 +245,8 @@ const Autodiagnostico: React.FC = () => {
       setShowAlert(true);
     } else if (currentSection >= 0 && answers[currentSection].includes('')) {
       setShowAlert(true); // Mostrar alerta si hay preguntas sin responder
+    } else if (currentSection === -1 && unidad === ''){
+      setShowAlert(true);
     } else {
       setShowAlert(false);
       if (currentSection < sections.length - 1) {
@@ -277,7 +265,7 @@ const Autodiagnostico: React.FC = () => {
 
   const calculateResults = () => {
     return sections.map((section, secIndex) => {
-      const score = answers[secIndex].reduce((acc, answer) => (answer === "Sí" ? acc + 1 : acc), 0);
+      const score = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
       return {
         subject: section.title,
         A: score,
@@ -297,13 +285,13 @@ const Autodiagnostico: React.FC = () => {
 
   const calculatePercentages = () => {
     return sections.map((section, secIndex) => {
-      const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer === "Sí" ? acc + 1 : acc), 0);
+      const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
       const totalQuestions = section.questions.length;
       const percentage = (correctAnswers / totalQuestions) * 100;
 
       return {
         section: section.title,
-        percentage: percentage.toFixed(2), // Convertir a porcentaje con 2 decimales
+        percentage: percentage.toFixed(2),
         correctAnswers,
         totalQuestions,
       };
@@ -334,7 +322,7 @@ const Autodiagnostico: React.FC = () => {
           heightLeft -= pageHeight;
         }
   
-        pdf.save(`${name}_${surname}_Resultados.pdf`);
+        pdf.save(`${name}_${surname}_${unidad}_Resultados.pdf`);
       });
     }
   };
@@ -398,6 +386,35 @@ const Autodiagnostico: React.FC = () => {
               Por favor, ingrese su nombre y apellido para continuar.
             </Alert>
           )}
+          <Typography variant="h4" gutterBottom>
+            Seleccione la unidad a la que pertenece 
+          </Typography>
+          <Select
+            value={unidad}
+            onChange={(e) => setUnidad(e.target.value)}
+            displayEmpty
+            fullWidth
+            required
+          >
+            <MenuItem value="" disabled>
+              Seleccione una unidad
+            </MenuItem>
+            <MenuItem value="Control y riesgos">Control y riesgos</MenuItem>
+            <MenuItem value="inversiones">inversiones</MenuItem>
+            <MenuItem value="caja">caja</MenuItem>
+            <MenuItem value="caja - pagos">caja - pagos</MenuItem>
+            <MenuItem value="caja - recaudos">caja - recaudos</MenuItem>
+            <MenuItem value="cobranza - coactivo">cobranza - coactivo</MenuItem>
+            <MenuItem value="cobranza - fp">cobranza - fp</MenuItem>
+            <MenuItem value="cobranza - concursales">cobranza - concursales</MenuItem>
+            <MenuItem value="cobranza - persuasivo">cobranza - persuasivo</MenuItem>
+          </Select>
+          {showAlert && (
+            <Alert severity="warning" onClose={() => setShowAlert(false)}>
+              Por favor, seleccione la unidad a la que pertenece.
+            </Alert>
+          )}
+
           <Button
             variant="contained"
             color="primary"
@@ -460,34 +477,21 @@ const Autodiagnostico: React.FC = () => {
           </Typography>
 
           {/* Contenedor en formato de grid para preguntas y respuestas */}
-          <Box
-            display="grid"
-            gridTemplateColumns="1fr 1fr"
-            columnGap={3}
-            rowGap={2}
-          >
+          <Box display="grid" gridTemplateColumns="1fr" gap={2}>
             {sections[currentSection].questions.map((question, index) => (
-              <React.Fragment key={index}>
-                {/* Preguntas en la columna izquierda */}
-                <Box>
-                  <Tooltip title={question.tooltip} placement="top" arrow>
-                    <Typography variant="body1">
-                      {index + 1 + currentSection * 3}. {question.text}
-                    </Typography>
-                  </Tooltip>
-                </Box>
-
-                {/* Respuestas en la columna derecha */}
-                <Box>
-                  <Autocomplete
-                    value={answers[currentSection][index]}
-                    onChange={(event, newValue) => handleChange(index, newValue)}
-                    options={options}
-                    renderInput={(params) => <TextField {...params} label="Seleccione una opción" variant="outlined" size="small" />}
-                    fullWidth
+              <Box key={index}>
+                <Tooltip title={question.tooltip} arrow>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={answers[currentSection][index]}
+                        onChange={(e) => handleChange(index, e.target.checked)}
+                      />
+                    }
+                    label={question.text}
                   />
-                </Box>
-              </React.Fragment>
+                </Tooltip>
+              </Box>
             ))}
           </Box>
 
@@ -532,14 +536,15 @@ const Autodiagnostico: React.FC = () => {
           <Typography variant="h4" gutterBottom>
             Porcentaje de respuestas correctas
           </Typography>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={calculatePercentages()}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="section" />
-              <YAxis />
-              <RechartsTooltip />
-              <Bar dataKey="percentage" fill="#8884d8" />
-            </BarChart>
+          <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={calculatePercentages()} margin={{ top: 0, right: 30, left: 30, bottom: 115 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="section" angle={-45} textAnchor="end" />
+            <YAxis />
+            <RechartsTooltip />
+            <Bar dataKey="percentage" fill="#8884d8" />
+          </BarChart>
+
           </ResponsiveContainer>
 
           {shouldShowRecomendations(calculatePercentages()) && (
@@ -580,6 +585,7 @@ const Autodiagnostico: React.FC = () => {
             onClick={() => generarExcel(
               name, 
               surname, 
+              unidad,
               sections.flatMap(section => section.questions.map(q => q.text)), 
               answers.flatMap(a => a)
             )}
