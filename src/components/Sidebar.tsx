@@ -34,15 +34,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleSidebar }) => {
       }}
     >
       <List>
-        <ListItem button component={Link} to="/">
-          <ListItemText primary="Home" />
-        </ListItem>
         <ListItem button component={Link} to="/autodiagnostico">
           <ListItemText primary="Autodiagnóstico de Seguridad Informática" />
         </ListItem>
         {isAuthenticated && (
           <ListItem button component={Link} to="/gestion-conocimiento">
             <ListItemText primary="Gestión del Conocimiento" />
+          </ListItem>
+        )}
+        {isAuthenticated && (
+          <ListItem button component={Link} to="/">
+            <ListItemText primary="Home" />
           </ListItem>
         )}
       </List>
