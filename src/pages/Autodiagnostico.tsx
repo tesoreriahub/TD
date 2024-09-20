@@ -7,58 +7,101 @@ import * as XLSX from 'xlsx';
 
 interface Recomendacion {
   texto: string;
-  link: string;
+  categoria: string;
 }
-const recomendaciones:{ [key: string]: Recomendacion[] } = {
+const recomendacionesPorPregunta: { [key: string]: Recomendacion[] } = {
   Autenticación: [
-    { texto: "howsecureismypassword", link: "https://howsecureismypassword.net/" },
-    { texto: "KeePass", link: "https://keepass.info/" },
-    { texto: "Bitwarden", link: "https://bitwarden.com/" },
-    { texto: "Proton", link: "https://proton.me/" },
-    { texto: "2fas", link: "https://2fas.com/" },
-    { texto: "Aegis", link: "https://getaegis.app/" },
-    { texto: "Authenticator", link: "https://authenticator.cc/" }
+    { texto: "Asegúrate de crear contraseñas robustas de mínimo 9 caracteres que incorporen mayúsculas, minúsculas, números y caracteres especiales. Esta combinación permite reducir el riesgo de ataques de fuerza bruta. ", categoria: "contraseñas" },
+    { texto: "Activa siempre la autenticación de dos factores (2FA) para añadir una capa de seguridad adicional a tu cuenta.", categoria: "contraseñas" },
+    { texto: "Utiliza contraseñas únicas para cada cuenta y cambia las predeterminadas inmediatamente para evitar vulnerabilidades comunes.", categoria: "contraseñas" },
+    { texto: "Usa un administrador de contraseñas confiable para generar y almacenar tus contraseñas de manera segura.", categoria: "contraseñas" },
+    { texto: "Mantén tus contraseñas privadas y no las compartas con nadie para prevenir accesos no autorizados.", categoria: "contraseñas" },
+    { texto: "Revisa frecuentemente los registros de actividad de tus cuentas y cierra sesiones activas para evitar accesos no deseados. ", categoria: "contraseñas" },
+    { texto: "Asegúrate de que tu información de recuperación (correo alternativo, número de teléfono) esté actualizada para recuperar acceso en caso de problemas. ", categoria: "contraseñas" }
   ],
   "Navegación Web": [
-    { texto: "Mozilla Firefox", link: "https://www.mozilla.org/en-US/firefox/new/" },
-    { texto: "Brave Browser", link: "https://brave.com/" },
-    { texto: "DuckDuckGo", link: "https://duckduckgo.com/" },
-    { texto: "Qwant", link: "https://www.qwant.com/" },
-    { texto: "Whatismybrowser", link: "https://www.whatismybrowser.com/" },
-    { texto: "EFF", link: "https://www.eff.org/" }
+    { texto: "Verifica que los sitios web sean legítimos revisando la URL y asegurándote de que utilicen HTTPS.", categoria: "https://www.mozilla.org/en-US/firefox/new/" },
+    { texto: "Digita la URL directamente en lugar de buscarla en motores de búsqueda para evitar sitios falsos.", categoria: "https://brave.com/" },
+    { texto: "Evita descargar archivos de páginas no confiables para prevenir malware y amenazas a tu sistema.", categoria: "https://duckduckgo.com/" },
+    { texto: "Mantén tu navegador actualizado, bloquea anuncios y elimina complementos que no uses para reducir vulnerabilidades.", categoria: "https://www.qwant.com/" },
+    { texto: "Desactiva la opción de guardar contraseñas críticas en el navegador para proteger tus cuentas sensibles.", categoria: "https://www.whatismybrowser.com/" },
+    { texto: "Utiliza el modo incógnito para proteger tu información privada al navegar por sitios web sensibles.", categoria: "https://www.whatismybrowser.com/" },
+    { texto: "Revisa y ajusta regularmente los permisos que otorgas a los sitios web, como acceso a cookies, ubicación, y dispositivos.", categoria: "https://www.whatismybrowser.com/" },
+    { texto: "Evita realizar transacciones importantes o ingresar credenciales en redes Wi-Fi públicas para minimizar riesgos.", categoria: "https://www.whatismybrowser.com/" },
   ],
   "Correo electrónico": [
-    { texto: "Howtostopemailtracking", link: "https://emailprivacytester.com/" }
+    { texto: "Asegúrate de confirmar la autenticidad de los remitentes para evitar la divulgación de información sensible.", categoria: "https://emailprivacytester.com/" },
+    { texto: "No hagas clic en enlaces ni descargues archivos de correos sospechosos para prevenir posibles amenazas.", categoria: "https://signal.org/" },
+    { texto: "Mantén tu software de correo electrónico actualizado para protegerte contra vulnerabilidades de seguridad.", categoria: "https://signal.org/" },
+    { texto: "Marca los correos electrónicos sospechosos como spam para mantener tu bandeja de entrada limpia y segura.", categoria: "https://signal.org/" },
+    { texto: "Verifica los destinatarios de tus correos electrónicos antes de enviar información confidencial para evitar errores.", categoria: "https://signal.org/" }
+    
   ],
   "Aplicaciones de mensajería": [
-    { texto: "Signal", link: "https://signal.org/" }
+    { texto: "Usa únicamente plataformas de mensajería de buena reputación para asegurar la privacidad de tus comunicaciones.", categoria: "https://signal.org/" },
+    { texto: "Cierra sesión en tus servicios de mensajería en dispositivos compartidos para evitar accesos no autorizados.", categoria: "https://signal.org/" },
+    { texto: "Ten cuidado antes de hacer clic en enlaces recibidos por chat para prevenir ataques de phishing o malware.", categoria: "https://signal.org/" },
+    { texto: "Actualiza regularmente tus aplicaciones de mensajería para protegerlas contra vulnerabilidades y amenazas de seguridad.", categoria: "https://signal.org/" },
+    { texto: "Realiza copias de seguridad de tus datos importantes para evitar la pérdida de información en caso de problemas.", categoria: "https://signal.org/" },
+    { texto: "Evita enviar datos sensibles como contraseñas o archivos confidenciales a través de chats para proteger tu información.", categoria: "https://signal.org/" },
+    { texto: "Comparte información únicamente en grupos donde conozcas a los destinatarios para minimizar el riesgo de divulgación no autorizada.", categoria: "https://signal.org/" }
   ],
   "Redes Sociales": [
-    { texto: "Mastodon", link: "https://joinmastodon.org/" },
-    { texto: "PeerTube", link: "https://joinpeertube.org/" },
-    { texto: "dTube", link: "https://d.tube/" }
+    { texto: "Sé consciente del alcance público o privado de tus publicaciones para proteger tu privacidad.", categoria: "https://joinmastodon.org/" },
+    { texto: "No reveles información personal sensible como teléfono y correo electrónico en tus publicaciones para evitar riesgos de exposición.", categoria: "https://joinpeertube.org/" },
+    { texto: "Evita compartir tu ubicación geográfica mientras estás fuera de casa para prevenir posibles amenazas a tu seguridad.", categoria: "https://d.tube/" },
+    { texto: "Verifica la autenticidad de las solicitudes de información personal antes de responder para evitar fraudes.", categoria: "https://d.tube/" },
+    { texto: "No participes en encuestas o concursos que soliciten información personal innecesaria para proteger tus datos.", categoria: "https://d.tube/" }
+
   ],
   "Dispositivos Móviles": [
-    { texto: "GrapheneOS", link: "https://grapheneos.org/" }, // Sistema operativo móvil enfocado en seguridad
-    { texto: "CalyxOS", link: "https://calyxos.org/" }, // Sistema operativo móvil seguro y privado
-    { texto: "Blokada", link: "https://blokada.org/" } // Bloqueador de anuncios y rastreadores para móviles
+    { texto: "Configura opciones de localización en tu teléfono para poder rastrearlo en caso de robo o hurto.", categoria: "https://grapheneos.org/" }, 
+    { texto: "Elimina las aplicaciones que ya no usas para reducir el riesgo de vulnerabilidades y mantener tu dispositivo seguro.", categoria: "https://calyxos.org/" },
+    { texto: "Instala solo aplicaciones de fuentes oficiales, revisa los permisos que solicitan y verifica las reseñas antes de la instalación.", categoria: "https://blokada.org/" },
+    { texto: "Mantén actualizado el sistema operativo y las aplicaciones para protegerte contra vulnerabilidades y amenazas de seguridad.", categoria: "https://cryptomator.org/" },
+    { texto: "Asegúrate de tener un antivirus instalado en tu teléfono para protegerlo contra malware y otras amenazas.", categoria: "https://cryptomator.org/" },
+    { texto: "Realiza copias de seguridad periódicas de tus datos para prevenir la pérdida de información importante.", categoria: "https://cryptomator.org/" },
+    { texto: "Configura tu dispositivo para que se bloquee automáticamente después de un período de inactividad para proteger tu información.", categoria: "https://cryptomator.org/" },
+
   ],
   "Equipos de cómputo": [
-    { texto: "Cryptomator", link: "https://cryptomator.org/" },
-    { texto: "Veracrypt", link: "https://www.veracrypt.fr/en/Home.html" },
-    { texto: "oo-software", link: "https://www.oo-software.com/en/shutup10" }
+    { texto: "Asegúrate de que tu sistema operativo esté actualizado para protegerte contra vulnerabilidades y amenazas.", categoria: "https://cryptomator.org/" },
+    { texto: "Activa el cifrado de disco duro para proteger tus datos en caso de pérdida o robo del dispositivo. En Windows puedes hacerlo a través de las funciones de Bitlocker", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Realiza copias de seguridad de tus datos importantes para prevenir la pérdida de información esencial.", categoria: "https://www.oo-software.com/en/shutup10" },
+    { texto: "Configura el bloqueo de pantalla automático para proteger tu dispositivo cuando no esté en uso.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Elimina archivos y programas que no utilices para reducir el riesgo de seguridad y liberar espacio.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Evita conectar dispositivos USB no confiables o no autorizados para prevenir posibles infecciones o daños.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Instala y mantén actualizado un software antivirus para proteger tu dispositivo contra amenazas y malware. Manten activo el Windows Defender. También es ideal que instaleces una licencia de un antivirus confiable que te pueda recomendar un experto informático.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Asegúrate de que el firewall esté activo para proteger tu red y dispositivos de accesos no autorizados.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+    { texto: "Realiza auditorías regulares de permisos y accesos a tus archivos y carpetas para asegurar que solo usuarios autorizados puedan acceder a ellos.", categoria: "https://www.veracrypt.fr/en/Home.html" },
+
   ],
   "Dispositivos Domóticos": [
-    { texto: "Home Assistant", link: "https://www.home-assistant.io/" }, // Plataforma de automatización del hogar enfocada en privacidad
-    { texto: "OpenHAB", link: "https://www.openhab.org/" }, // Solución de automatización del hogar open source
-    { texto: "ESET Smart Home", link: "https://www.eset.com/" } // Seguridad para dispositivos del hogar inteligente
+    { texto: "Cambia el nombre de tus dispositivos a uno que no revele información personal o detalles sobre marcas o modelos para proteger tu privacidad.", categoria: "https://www.home-assistant.io/" },
+    { texto: "Entiende qué datos se recopilan, almacenan y transmiten en tus dispositivos inteligentes para gestionar mejor tu información.", categoria: "https://www.openhab.org/" },
+    { texto: "Configura las opciones de privacidad para no compartir datos con terceros y proteger tu información personal.", categoria: "https://www.openhab.org/" },
+    { texto: "Mantén actualizado el software de tus dispositivos domóticos para asegurar que cuenten con las últimas mejoras de seguridad.", categoria: "https://www.openhab.org/" },
+    { texto: "Revisa y ajusta las configuraciones de privacidad de tus dispositivos domóticos de acuerdo con las recomendaciones de seguridad para proteger tu información.", categoria: "https://www.eset.com/" }
   ],
   "Buenas prácticas financieras": [
-    { texto: "Privacy", link: "https://privacy.com/" },
-    { texto: "MYSUDO", link: "https://mysudo.com/" }
+    { texto: "Activa y revisa las notificaciones de tus movimientos y transacciones para detectar actividades sospechosas.", categoria: "https://privacy.com/" },
+    { texto: "Usa una clave dinámica o token para añadir una capa adicional de seguridad a tus transacciones.", categoria: "https://privacy.com/" },
+    { texto: "Verifica la legitimidad de las plataformas de pago y comercios electrónicos antes de realizar compras para evitar fraudes.", categoria: "https://privacy.com/" },
+    { texto: "Protege la información de tu tarjeta de crédito o débito al realizar pagos para prevenir el robo de datos.", categoria: "https://privacy.com/" },
+    { texto: "Revisa regularmente los saldos de tus cuentas para identificar y resolver rápidamente cualquier discrepancia.", categoria: "https://privacy.com/" },
+    { texto: "Evita realizar transacciones financieras en redes públicas para proteger tu información de posibles interceptaciones.", categoria: "https://privacy.com/" },
+    { texto: "Desactiva servicios de auto-completar en aplicaciones financieras para evitar el almacenamiento inseguro de datos sensibles.", categoria: "https://mysudo.com/" }
   ],
   "Otras Amenazas latentes": [
-    { texto: "VirusTotal", link: "https://www.virustotal.com/" }
+    { texto: "Revisa regularmente el consentimiento que otorgas a aplicaciones y servicios para asegurar que solo compartas la información necesaria.", categoria: "https://www.virustotal.com/" },
+    { texto: "Realiza revisiones periódicas de las configuraciones de privacidad y seguridad en tus aplicaciones y dispositivos para mantener tu protección actualizada.", categoria: "https://www.virustotal.com/" },
+    { texto: "Investiga sobre qué es el shoulder surfing y toma medidas para proteger tus datos personales cuando estés en público.", categoria: "https://www.virustotal.com/" },
+    { texto: "Infórmate sobre el phishing y verifica la autenticidad de los mensajes y correos electrónicos para evitar caer en fraudes.", categoria: "https://www.virustotal.com/" },
+    { texto: "Investiga qué es el stalkerware y mantén tu dispositivo seguro para prevenir el seguimiento no deseado.", categoria: "https://www.virustotal.com/" },
+    { texto: "Entiende qué es el malware y asegúrate de tener medidas de protección para evitar infecciones.", categoria: "https://www.virustotal.com/" },
+    { texto: "Mantente alerta ante ataques de ransomware y realiza copias de seguridad periódicas para proteger tus datos.", categoria: "https://www.virustotal.com/" },
+    { texto: "Investiga las estafas de soporte técnico y/o vishing y verifica la identidad de quienes te contactan antes de proporcionar información.", categoria: "https://www.virustotal.com/" },
+    { texto: "Reconoce los ataques de ingeniería social y mantén una actitud crítica ante solicitudes de información personal.", categoria: "https://www.virustotal.com/" }
   ]
 };
 
@@ -298,6 +341,44 @@ const Autodiagnostico: React.FC = () => {
       };
     }).sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage)); // Ordena de mayor a menor porcentaje
   };
+
+  const obtenerRecomendaciones = () => {
+    let recomendacionesPersonalizadas: { categoria: string; recomendaciones: Recomendacion[], porcentaje: number }[] = [];
+    
+    sections.forEach((section, secIndex) => {
+      let recomendacionesPorSeccion: Recomendacion[] = [];
+      let correctAnswers = 0;
+  
+      section.questions.forEach((question, questionIndex) => {
+        // Contamos las respuestas correctas
+        if (answers[secIndex][questionIndex]) {
+          correctAnswers += 1;
+        } else {
+          const recomendacion = recomendacionesPorPregunta[section.title]?.[questionIndex];
+          if (recomendacion) {
+            recomendacionesPorSeccion.push(recomendacion);
+          }
+        }
+      });
+  
+      const totalQuestions = section.questions.length;
+      const porcentaje = (correctAnswers / totalQuestions) * 100;
+  
+      if (recomendacionesPorSeccion.length > 0) {
+        recomendacionesPersonalizadas.push({
+          categoria: section.title,
+          recomendaciones: recomendacionesPorSeccion,
+          porcentaje: parseFloat(porcentaje.toFixed(2)), // Redondear a dos decimales
+        });
+      }
+    });
+  
+    // Ordenar por porcentaje de aciertos de mayor a menor
+    return recomendacionesPersonalizadas.sort((a, b) => b.porcentaje - a.porcentaje);
+  };
+  
+  
+  
 
   const calculateMeanPercentage = () => {
     const percentages = calculatePercentages();
@@ -578,33 +659,28 @@ const Autodiagnostico: React.FC = () => {
           {shouldShowRecomendations(calculatePercentages()) && (
             <Box marginTop={4}>
               <Typography variant="h5" gutterBottom>
-                Recomendaciones
+                Recomendaciones Personalizadas
               </Typography>
-              {calculatePercentages().map((sectionResult, index) => {
-                if (parseFloat(sectionResult.percentage) < 70) { // Recomendaciones para secciones con menos de 70%
-                  return (
-                    <Box key={index} marginBottom={2}>
-                      <Typography variant="h6">
-                        {sectionResult.section} ({sectionResult.percentage}%)
-                      </Typography>
-                      <ul>
-                        {recomendaciones[sectionResult.section]?.map((rec: Recomendacion, i: number) => (
-                          <li key={i}>
-                            <Typography variant="body1">
-                              <a href={rec.link} target="_blank" rel="noopener noreferrer">
-                                {rec.texto}
-                              </a>
-                            </Typography>
-                          </li>
-                        )) || <Typography variant="body1">Por recomendar</Typography>}
-                      </ul>
-                    </Box>
-                  );
-                }
-                return null;
-              })}
+              {obtenerRecomendaciones().map((sectionResult, index) => (
+                <Box key={index} marginBottom={2}>
+                  <Typography variant="h6">
+                    {sectionResult.categoria} ({sectionResult.porcentaje}% )
+                  </Typography>
+                  <ul>
+                    {sectionResult.recomendaciones.map((rec, i) => (
+                      <li key={i}>
+                        <Typography variant="body1">
+                          {rec.texto}
+                        </Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </Box>
+              ))}
             </Box>
           )}
+
+
 
           {/* Botón para generar el archivo Excel */}
           <Button
