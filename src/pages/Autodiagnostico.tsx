@@ -109,9 +109,10 @@ const recomendacionesPorPregunta: { [key: string]: Recomendacion[] } = {
 
 // Función para generar el archivo Excel y permitir la descarga
 
-const generarExcel = (nombre: string, apellido: string, unidad: string, preguntas: string[], respuestas: string[]) => {
+const generarExcel = (nombre: string, apellido: string, unidad: string,correo:string, preguntas: string[], respuestas: string[]) => {
   // Crear una hoja de cálculo con preguntas y respuestas
   const data = preguntas.map((pregunta, index) => ({
+    correo: correo,
     Pregunta: pregunta,
     Respuesta: respuestas[index] || 'Sin responder',
   }));
@@ -263,6 +264,8 @@ const Autodiagnostico: React.FC = () => {
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(''); 
   const [unidad, setUnidad] = useState('');
   const [answers, setAnswers] = useState(Array(sections.length).fill(null).map((_, i) => Array(sections[i].questions.length).fill(false)));
   const [currentSection, setCurrentSection] = useState(-1); // -1 es el estado inicial para pedir nombre y apellido
@@ -272,6 +275,11 @@ const Autodiagnostico: React.FC = () => {
 
   const resultRef = useRef<HTMLDivElement>(null); // Ref para capturar la sección de resultados
   
+  const validarCorreo = (correo: string) => {
+    // Expresión regular para validar el correo
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(correo);
+  };
 
 
   const isSectionComplete = (sectionIndex: number) => {
@@ -285,8 +293,18 @@ const Autodiagnostico: React.FC = () => {
   };
 
   const handleNextSection = () => {
-    if (currentSection === -1 && (name === '' || surname === '')) {
-      setShowAlert(true);
+    if (currentSection === -1) {
+      if (name === '' || surname === '' || unidad === '' || email === '') {
+        setShowAlert(true);
+        setEmailError(''); // Resetear el error del correo si faltan otros campos
+      } else if (!validarCorreo(email)) { // Validar el formato del correo
+        setEmailError('Por favor ingrese un correo institucional válido.');
+        setShowAlert(false); // Ocultar otras alertas
+      } else {
+        setEmailError(''); // No hay error, limpiar mensaje
+        setShowAlert(false);
+        setCurrentSection(0); // Comenzar la encuesta
+      }
     } else if (currentSection >= 0 && answers[currentSection].includes('')) {
       setShowAlert(true); // Mostrar alerta si hay preguntas sin responder
     } else if (currentSection === -1 && unidad === ''){
@@ -443,10 +461,10 @@ const Autodiagnostico: React.FC = () => {
         <Box>
           {/* Introducción antes de pedir el nombre */}
           <Typography variant="h4" align="center" gutterBottom>
-            Defensa Digital Personal en Seguridad de la Información (DDPSI)
+            Defensa Digital Individual en Seguridad de la Información (DDISI)
           </Typography>
           <Typography variant="h5" align="center" gutterBottom>
-            Bienvenido(a) a DDPSI
+            Bienvenido(a) a DDISI
           </Typography>
 
           <Typography variant="h6" gutterBottom>
@@ -460,11 +478,19 @@ const Autodiagnostico: React.FC = () => {
             Créditos
           </Typography>
           <Typography variant="body2" paragraph>
+            Desarrollado por Julián Uribe - julian.uribe@medellin.gov.co
+            </Typography>  
+            <Typography variant="body2" paragraph>
             Desarrollado por Alejandro Salgar  - alejandro.salgar@medellin.gov.co
           </Typography>
           <Typography variant="body2" paragraph>
             Supervisado por Jorge Iván Brand Ortíz - Subsecretaria de Tesoreria - Secretaria de Hacienda
           </Typography>
+          <Typography variant="body2" paragraph>
+            Asesoria conceptual por Javier Durán - javier.duran@medellin.gov.co
+          </Typography>
+          
+          
 
           {/* Sección para pedir el nombre y apellido */}
           <Typography variant="h4" gutterBottom>
@@ -485,6 +511,16 @@ const Autodiagnostico: React.FC = () => {
             value={surname}
             onChange={(e) => setSurname(e.target.value)}
             size="small"
+          />
+          <TextField
+            label="Correo Institucional"
+            fullWidth
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            size="small"
+            error={!!emailError} // Mostrar error si el estado de error no está vacío
+            helperText={emailError} // Mostrar el mensaje de error
           />
           {showAlert && (
             <Alert severity="warning" onClose={() => setShowAlert(false)}>
@@ -530,9 +566,7 @@ const Autodiagnostico: React.FC = () => {
             Comenzar Encuesta
           </Button>
             <Typography variant="h6">Referencias</Typography>
-            <Typography variant="body2" paragraph>
-              Desarrollado por Julián Uribe - julian.uribe@medellin.gov.co
-            </Typography>
+            
             <Typography variant="body2" paragraph>
             Chaudhary, S. (2024). Driving Behaviour Change with Cybersecurity Awareness. Computers & Security, 103858. https://doi.org/10.1016/j.cose.2024.103858
             </Typography>
@@ -690,6 +724,7 @@ const Autodiagnostico: React.FC = () => {
               name, 
               surname, 
               unidad,
+              email,
               sections.flatMap(section => section.questions.map(q => q.text)), 
               answers.flatMap(a => a)
             )}
