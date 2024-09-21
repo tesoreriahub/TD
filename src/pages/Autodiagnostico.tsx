@@ -136,89 +136,89 @@ const Autodiagnostico: React.FC = () => {
       title: 'Autenticación',
       description: 'La mayoría de las violaciones de datos reportadas se deben al uso de contraseñas débiles, predeterminadas o robadas. Utilice contraseñas largas, seguras y únicas, adminístrelas en un administrador de contraseñas seguro, habilite la autenticación de dos factores.',
       questions: [
-        { text: "Establezco contraseñas seguras de mínimo 9 caracteres que incorporan mayúsculas, minúsculas, números y caracteres especiales", tooltip: "Establecer contraseñas con estos requisitos dificulta su descifrado por atacantes." },
-        { text: "Cuando están disponibles, habilito los métodos de doble factor de autenticación, reconocimiento facial o huella", tooltip: "Estos métodos añaden una capa adicional de seguridad, evitando accesos no autorizados." },
-        { text: "Evito reutilizar mis contraseñas entre diferentes aplicaciones o usar contraseñas predeterminadas de aplicaciones o dispositivos", tooltip: "El uso de contraseñas únicas reduce el riesgo de comprometer múltiples cuentas si una es vulnerada." },
-        { text: "Utilizo un administrador de contraseñas seguro y evito guardar mis contraseñas en navegadores, notas físicas o notas digitales", tooltip: "Un administrador de contraseñas genera y almacena contraseñas de manera segura." },
-        { text: "Evito compartir mis contraseñas con otras personas, las mantengo de uso personal", tooltip: "Compartir contraseñas aumenta el riesgo de accesos no autorizados a sus cuentas." },
-        { text: "Reviso regularmente la actividad de inicio de sesión de mis cuentas y cierro las sesiones luego de usarlas", tooltip: "Revisar la actividad ayuda a identificar accesos sospechosos o no autorizados a tiempo." },
-        { text: "Mantengo actualizada la información de recuperación de mi cuenta", tooltip: "Esto garantiza que pueda recuperar el acceso en caso de olvido o pérdida de credenciales." },
+        { text: "Establezco contraseñas seguras de mínimo 9 caracteres que incorporan mayúsculas, minúsculas, números y caracteres especiales.", tooltip: "Establecer contraseñas con estos requisitos dificulta su descifrado por atacantes." },
+        { text: "Cuando están disponibles, habilito los métodos de doble factor de autenticación, reconocimiento facial o huella.", tooltip: "Estos métodos añaden una capa adicional de seguridad, evitando accesos no autorizados." },
+        { text: "Evito reutilizar mis contraseñas entre diferentes aplicaciones o usar contraseñas predeterminadas de aplicaciones o dispositivos.", tooltip: "El uso de contraseñas únicas reduce el riesgo de comprometer múltiples cuentas si una es vulnerada." },
+        { text: "Utilizo un administrador de contraseñas seguro y evito guardar mis contraseñas en navegadores, notas físicas o notas digitales.", tooltip: "Un administrador de contraseñas genera y almacena contraseñas de manera segura." },
+        { text: "Evito compartir mis contraseñas con otras personas, las mantengo de uso personal.", tooltip: "Compartir contraseñas aumenta el riesgo de accesos no autorizados a sus cuentas." },
+        { text: "Reviso regularmente la actividad de inicio de sesión de mis cuentas y cierro las sesiones luego de usarlas.", tooltip: "Revisar la actividad ayuda a identificar accesos sospechosos o no autorizados a tiempo." },
+        { text: "Mantengo actualizada la información de recuperación de mi cuenta.", tooltip: "Esto garantiza que pueda recuperar el acceso en caso de olvido o pérdida de credenciales." },
       ],
     },
     {
       title: 'Navegación Web',
       description: 'La mayoría de los sitios web utilizan algún tipo de seguimiento, lo que puede comprometer la privacidad. Es importante ser consciente de la seguridad al navegar por Internet.',
       questions: [
-        { text: "Compruebo que los sitios sean legítimos y usen HTTPS", tooltip: "HTTPS asegura la conexión cifrada entre el navegador y el servidor, protegiendo la información." },
-        { text: "Prefiero digitar la URL de las aplicaciones web en lugar de encontrarlas en un motor de búsqueda", tooltip: "Escribir directamente la URL reduce el riesgo de caer en sitios web fraudulentos." },
-        { text: "Evito descargar archivos de páginas web de dudosa reputación", tooltip: "Descargar archivos de fuentes no confiables puede introducir malware en su dispositivo." },
+        { text: "Compruebo que los sitios sean legítimos y usen HTTPS.", tooltip: "HTTPS asegura la conexión cifrada entre el navegador y el servidor, protegiendo la información." },
+        { text: "Prefiero digitar la URL de las aplicaciones web en lugar de encontrarlas en un motor de búsqueda.", tooltip: "Escribir directamente la URL reduce el riesgo de caer en sitios web fraudulentos." },
+        { text: "Evito descargar archivos de páginas web de dudosa reputación.", tooltip: "Descargar archivos de fuentes no confiables puede introducir malware en su dispositivo." },
         { text: "Mantengo mi navegador actualizado, bloqueo anuncios y desactivo complementos o plugins en desuso.", tooltip: "Estas prácticas reducen las vulnerabilidades y mejoran la seguridad del navegador." },
-        { text: "Evito guardar contraseñas de aplicaciones críticas en mi navegador", tooltip: "Guardar contraseñas en navegadores puede exponerlas si el navegador es comprometido." },
-        { text: "Utilizo el modo incógnito para separar la navegación abierta en Internet de mi navegación en aplicaciones protegidas", tooltip: "El modo incógnito no almacena el historial ni las cookies, pero no garantiza privacidad completa." },
+        { text: "Evito guardar contraseñas de aplicaciones críticas en mi navegador.", tooltip: "Guardar contraseñas en navegadores puede exponerlas si el navegador es comprometido." },
+        { text: "Utilizo el modo incógnito para separar la navegación abierta en Internet de mi navegación en aplicaciones protegidas.", tooltip: "El modo incógnito no almacena el historial ni las cookies, pero no garantiza privacidad completa." },
         { text: "Cuando me lo solicitan, reviso y gestiono los permisos de sitios web tales como acceso a cookies, ubicación, micrófono, cámara, etc.", tooltip: "Revisar y gestionar los permisos evita que los sitios web accedan a datos sin autorización." },
-        { text: "Hago un uso prudente de las redes Wi-Fi públicas evitando hacer transacciones o ingresar credenciales de mis servicios", tooltip: "Las redes Wi-Fi públicas son vulnerables a ataques y pueden comprometer sus datos." },
+        { text: "Hago un uso prudente de las redes Wi-Fi públicas evitando hacer transacciones o ingresar credenciales de mis servicios.", tooltip: "Las redes Wi-Fi públicas son vulnerables a ataques y pueden comprometer sus datos." },
       ],
     },
     {
       title: 'Correo electrónico',
       description: 'La seguridad del correo electrónico es esencial para proteger otras cuentas asociadas. Un correo electrónico comprometido puede permitir acceso no autorizado a múltiples servicios.',
       questions: [
-        { text: "Verifico la autenticidad de los remitentes antes de responder o proporcionar información confidencial", tooltip: "Verificar el remitente ayuda a evitar ataques de phishing." },
-        { text: "Evito hacer clic en enlaces sospechosos o descargar archivos de correos electrónicos de dudosa procedencia", tooltip: "Enlaces y archivos en correos no solicitados pueden contener malware o estafas." },
-        { text: "Verifico y autorizo actualizaciones de mi software de correo electrónico para protegerme contra vulnerabilidades", tooltip: "Mantener el software actualizado ayuda a prevenir vulnerabilidades." },
-        { text: "Marco como spam a aquellos correos electrónicos que incluyen contenido inapropiado o de dudosa procedencia", tooltip: "Marcar como spam reduce la exposición a correos maliciosos o no deseados." },
-        { text: "Verifico los destinatarios de mis correos electrónicos antes de enviar con información confidencial", tooltip: "Revisar los destinatarios evita enviar información sensible a personas equivocadas." },
+        { text: "Verifico la autenticidad de los remitentes antes de responder o proporcionar información confidencial.", tooltip: "Verificar el remitente ayuda a evitar ataques de phishing." },
+        { text: "Evito hacer clic en enlaces sospechosos o descargar archivos de correos electrónicos de dudosa procedencia.", tooltip: "Enlaces y archivos en correos no solicitados pueden contener malware o estafas." },
+        { text: "Verifico y autorizo actualizaciones de mi software de correo electrónico para protegerme contra vulnerabilidades.", tooltip: "Mantener el software actualizado ayuda a prevenir vulnerabilidades." },
+        { text: "Marco como spam a aquellos correos electrónicos que incluyen contenido inapropiado o de dudosa procedencia.", tooltip: "Marcar como spam reduce la exposición a correos maliciosos o no deseados." },
+        { text: "Verifico los destinatarios de mis correos electrónicos antes de enviar con información confidencial.", tooltip: "Revisar los destinatarios evita enviar información sensible a personas equivocadas." },
       ],
     },
     {
       title: 'Aplicaciones de mensajería',
       questions: [
-        { text: "Utilizo una plataforma de mensajería de buena reputación", tooltip: "El cifrado de extremo a extremo protege sus mensajes contra accesos no autorizados." },
-        { text: "Evito dejar abiertas sesiones de mis servicios de mensajería en dispositivos de uso compartido", tooltip: "Cerrar sesiones en dispositivos compartidos evita accesos no deseados." },
+        { text: "Utilizo una plataforma de mensajería de buena reputación.", tooltip: "El cifrado de extremo a extremo protege sus mensajes contra accesos no autorizados." },
+        { text: "Evito dejar abiertas sesiones de mis servicios de mensajería en dispositivos de uso compartido.", tooltip: "Cerrar sesiones en dispositivos compartidos evita accesos no deseados." },
         { text: "Tengo cuidado antes de hacer click en enlaces que recibo por medio de chats.", tooltip: "Enlaces maliciosos enviados por chat pueden comprometer su dispositivo o datos." },
-        { text: "Mantengo actualizadas mis aplicaciones de mensajería para protegerlas contra vulnerabilidades", tooltip: "Las actualizaciones corrigen vulnerabilidades y mejoran la seguridad." },
-        { text: "Realizo copias de seguridad de mis datos importantes", tooltip: "Hacer copias de seguridad protege contra la pérdida de datos en caso de fallos o ataques." },
-        { text: "Evito enviar datos sensibles como contraseñas o archivos confidenciales por medio de chats", tooltip: "Enviar datos sensibles por chat aumenta el riesgo de que sean interceptados." },
-        { text: "Comparto información pertinente solo en grupos donde reconozco a los destinatarios", tooltip: "Verificar los miembros del grupo evita compartir información con personas no deseadas." },
+        { text: "Mantengo actualizadas mis aplicaciones de mensajería para protegerlas contra vulnerabilidades.", tooltip: "Las actualizaciones corrigen vulnerabilidades y mejoran la seguridad." },
+        { text: "Realizo copias de seguridad de mis datos importantes.", tooltip: "Hacer copias de seguridad protege contra la pérdida de datos en caso de fallos o ataques." },
+        { text: "Evito enviar datos sensibles como contraseñas o archivos confidenciales por medio de chats.", tooltip: "Enviar datos sensibles por chat aumenta el riesgo de que sean interceptados." },
+        { text: "Comparto información pertinente solo en grupos donde reconozco a los destinatarios.", tooltip: "Verificar los miembros del grupo evita compartir información con personas no deseadas." },
       ],
     },
     {
       title: 'Redes Sociales',
       description: 'Es importante proteger la información personal en redes sociales configurando adecuadamente la privacidad y siendo consciente de lo que se comparte.',
       questions: [
-        { text: "Mantengo conciencia del alcance público o privado de mis publicaciones", tooltip: "Ajustar la privacidad de sus publicaciones ayuda a proteger su información." },
-        { text: "Evito revelar demasiado de mi vida o datos personales como teléfono y correo electrónico", tooltip: "Compartir demasiada información puede ser aprovechado por ciberdelincuentes." },
-        { text: "Evito publicar datos geográficos mientras estoy fuera de casa", tooltip: "Evitar publicaciones geográficas en tiempo real reduce el riesgo de robo o acoso." },
-        { text: "Verifico la autenticidad de las solicitudes de información personal antes de responder", tooltip: "Verificar solicitudes evita ser víctima de suplantación o estafas." },
-        { text: "Evito participar en encuestas o concursos que soliciten información personal innecesaria", tooltip: "Evitar compartir información en encuestas reduce el riesgo de robo de identidad." },
+        { text: "Mantengo conciencia del alcance público o privado de mis publicaciones.", tooltip: "Ajustar la privacidad de sus publicaciones ayuda a proteger su información." },
+        { text: "Evito revelar demasiado de mi vida o datos personales como teléfono y correo electrónico.", tooltip: "Compartir demasiada información puede ser aprovechado por ciberdelincuentes." },
+        { text: "Evito publicar datos geográficos mientras estoy fuera de casa.", tooltip: "Evitar publicaciones geográficas en tiempo real reduce el riesgo de robo o acoso." },
+        { text: "Verifico la autenticidad de las solicitudes de información personal antes de responder.", tooltip: "Verificar solicitudes evita ser víctima de suplantación o estafas." },
+        { text: "Evito participar en encuestas o concursos que soliciten información personal innecesaria.", tooltip: "Evitar compartir información en encuestas reduce el riesgo de robo de identidad." },
       ],
     },
     {
       title: 'Dispositivos Móviles',
       description: 'Los dispositivos móviles generan una gran cantidad de datos, por lo que es fundamental protegerlos adecuadamente.',
       questions: [
-        { text: "Configuro opciones para localización del teléfono ante robo o hurto", tooltip: "Configurar opciones de localización facilita recuperar el dispositivo en caso de pérdida o robo." },
-        { text: "Elimino aplicaciones que ya no utilizo para reducir el riesgo de vulnerabilidades", tooltip: "Eliminar aplicaciones no utilizadas minimiza posibles vectores de ataque." },
+        { text: "Configuro opciones para localización del teléfono ante robo o hurto.", tooltip: "Configurar opciones de localización facilita recuperar el dispositivo en caso de pérdida o robo." },
+        { text: "Elimino aplicaciones que ya no utilizo para reducir el riesgo de vulnerabilidades.", tooltip: "Eliminar aplicaciones no utilizadas minimiza posibles vectores de ataque." },
         { text: "Instalo solo aplicaciones de fuentes oficiales, verifico los permisos que solicita y reviso las reseñas antes de la instalación.", tooltip: "Instalar aplicaciones solo de fuentes confiables reduce el riesgo de malware." },
-        { text: "Actualizo regularmente el sistema operativo y las aplicaciones", tooltip: "Las actualizaciones incluyen mejoras de seguridad para evitar vulnerabilidades." },
-        { text: "Tengo instalado un antivirus en mi teléfono", tooltip: "El antivirus protege su dispositivo de malware y otras amenazas." },
-        { text: "Realizo copias de seguridad periódicas de mis datos", tooltip: "Hacer copias de seguridad regularmente protege sus datos en caso de pérdida." },
-        { text: "Configuro el dispositivo para que se bloquee automáticamente después de un período de inactividad", tooltip: "El bloqueo automático previene accesos no autorizados si el dispositivo se deja desatendido." },
+        { text: "Actualizo regularmente el sistema operativo y las aplicaciones.", tooltip: "Las actualizaciones incluyen mejoras de seguridad para evitar vulnerabilidades." },
+        { text: "Tengo instalado un antivirus en mi teléfono.", tooltip: "El antivirus protege su dispositivo de malware y otras amenazas." },
+        { text: "Realizo copias de seguridad periódicas de mis datos.", tooltip: "Hacer copias de seguridad regularmente protege sus datos en caso de pérdida." },
+        { text: "Configuro el dispositivo para que se bloquee automáticamente después de un período de inactividad.", tooltip: "El bloqueo automático previene accesos no autorizados si el dispositivo se deja desatendido." },
       ],
     },
     {
       title: 'Equipos de cómputo',
       description: 'Es crucial mantener su sistema operativo y aplicaciones actualizadas, además de implementar prácticas de seguridad adicionales como el cifrado y copias de seguridad.',
       questions: [
-        { text: "Promuevo que mi sistema operativo esté actualizado", tooltip: "Mantener el sistema operativo actualizado protege contra vulnerabilidades conocidas." },
-        { text: "Me intereso por tener el cifrado de disco duro habilitado", tooltip: "El cifrado de disco asegura que los datos no puedan ser leídos sin autorización." },
-        { text: "Tengo copia de seguridad de mis datos importantes", tooltip: "Las copias de seguridad protegen sus datos en caso de fallos o ataques." },
-        { text: "Me intereso por el bloqueo de pantalla cuando está inactivo", tooltip: "El bloqueo de pantalla impide accesos no autorizados cuando se deja el equipo desatendido." },
-        { text: "Verifico la eliminación de los archivos o programas que no utilizo", tooltip: "Eliminar archivos y programas innecesarios reduce la superficie de ataque." },
-        { text: "Evito conectar dispositivos tipo USB no confiables o no autorizados", tooltip: "Los dispositivos USB pueden ser vectores de malware, evite conectar dispositivos no verificados." },
-        { text: "Verifico la instalación de un software antivirus actualizado", tooltip: "El antivirus actualizado protege contra malware y otras amenazas en tiempo real." },
-        { text: "Verifico que el firewall esté activo para proteger mi red y dispositivos", tooltip: "El firewall controla las conexiones entrantes y salientes, protegiendo contra accesos no autorizados." },
-        { text: "Hago auditorías regulares de los permisos y accesos a mis archivos y carpetas", tooltip: "Revisar permisos previene accesos indebidos a archivos sensibles o importantes." },
+        { text: "Promuevo que mi sistema operativo esté actualizado.", tooltip: "Mantener el sistema operativo actualizado protege contra vulnerabilidades conocidas." },
+        { text: "Me intereso por tener el cifrado de disco duro habilitado.", tooltip: "El cifrado de disco asegura que los datos no puedan ser leídos sin autorización." },
+        { text: "Tengo copia de seguridad de mis datos importantes.", tooltip: "Las copias de seguridad protegen sus datos en caso de fallos o ataques." },
+        { text: "Me intereso por el bloqueo de pantalla cuando está inactivo.", tooltip: "El bloqueo de pantalla impide accesos no autorizados cuando se deja el equipo desatendido." },
+        { text: "Verifico la eliminación de los archivos o programas que no utilizo.", tooltip: "Eliminar archivos y programas innecesarios reduce la superficie de ataque." },
+        { text: "Evito conectar dispositivos tipo USB no confiables o no autorizados.", tooltip: "Los dispositivos USB pueden ser vectores de malware, evite conectar dispositivos no verificados." },
+        { text: "Verifico la instalación de un software antivirus actualizado.", tooltip: "El antivirus actualizado protege contra malware y otras amenazas en tiempo real." },
+        { text: "Verifico que el firewall esté activo para proteger mi red y dispositivos.", tooltip: "El firewall controla las conexiones entrantes y salientes, protegiendo contra accesos no autorizados." },
+        { text: "Hago auditorías regulares de los permisos y accesos a mis archivos y carpetas.", tooltip: "Revisar permisos previene accesos indebidos a archivos sensibles o importantes." },
       ],
     },
     {
@@ -226,38 +226,38 @@ const Autodiagnostico: React.FC = () => {
       description: 'Los dispositivos conectados a Internet en su hogar pueden comprometer su privacidad si no se configuran adecuadamente.',
       questions: [
         { text: "Cambio el nombre de los dispositivos por un nombre que no revele información personal o marcas/modelos.", tooltip: "Renombrar dispositivos dificulta que sean identificados y atacados fácilmente." },
-        { text: "Comprendo qué datos se recopilan, almacenan y transmiten en los dispositivos inteligentes que utilizo", tooltip: "Entender la recopilación de datos ayuda a proteger su privacidad y evitar abusos." },
-        { text: "Establezco configuraciones de privacidad y decido no compartir datos con terceros", tooltip: "Configurar la privacidad correctamente previene el acceso no autorizado a sus datos personales." },
-        { text: "Actualizo regularmente el software de mis dispositivos domóticos", tooltip: "Las actualizaciones corrigen vulnerabilidades que podrían ser explotadas por atacantes." },
-        { text: "Reviso y ajusto las configuraciones de privacidad de mis dispositivos domóticos según las recomendaciones de seguridad", tooltip: "Revisar y ajustar la configuración de privacidad mejora la protección de datos sensibles." },
+        { text: "Comprendo qué datos se recopilan, almacenan y transmiten en los dispositivos inteligentes que utilizo.", tooltip: "Entender la recopilación de datos ayuda a proteger su privacidad y evitar abusos." },
+        { text: "Establezco configuraciones de privacidad y decido no compartir datos con terceros.", tooltip: "Configurar la privacidad correctamente previene el acceso no autorizado a sus datos personales." },
+        { text: "Actualizo regularmente el software de mis dispositivos domóticos.", tooltip: "Las actualizaciones corrigen vulnerabilidades que podrían ser explotadas por atacantes." },
+        { text: "Reviso y ajusto las configuraciones de privacidad de mis dispositivos domóticos según las recomendaciones de seguridad.", tooltip: "Revisar y ajustar la configuración de privacidad mejora la protección de datos sensibles." },
       ],
     },
     {
       title: 'Buenas prácticas financieras',
       description: 'Proteger sus finanzas en línea es esencial para evitar fraudes y robos de identidad.',
       questions: [
-        { text: "Tengo activas y estoy atento a las notificaciones sobre mis movimientos y transacciones", tooltip: "Recibir notificaciones en tiempo real permite detectar rápidamente actividades sospechosas." },
-        { text: "Tengo activa una clave dinámica o un token", tooltip: "El uso de claves dinámicas o tokens añade una capa adicional de seguridad en las transacciones financieras." },
-        { text: "Verifico la legitimidad de las plataformas de pago y comercios electrónicos", tooltip: "Comprar solo en plataformas legítimas reduce el riesgo de fraudes y robos de información." },
-        { text: "Protejo la información de mi tarjeta cuando realizo pagos en algún comercio", tooltip: "Proteger los datos de la tarjeta evita que sean interceptados durante las transacciones." },
-        { text: "Reviso con regularidad los saldos de mis cuentas", tooltip: "Monitorear el saldo ayuda a identificar transacciones no autorizadas rápidamente." },
-        { text: "Evito hacer transacciones financieras en redes públicas", tooltip: "Las redes públicas pueden ser vulnerables a ataques, comprometiendo la seguridad de sus datos financieros." },
-        { text: "Desactivo servicios o configuraciones de auto-completar en aplicaciones financieras", tooltip: "Desactivar el autocompletado evita que información sensible sea introducida automáticamente en lugares inseguros." },
+        { text: "Tengo activas y estoy atento a las notificaciones sobre mis movimientos y transacciones.", tooltip: "Recibir notificaciones en tiempo real permite detectar rápidamente actividades sospechosas." },
+        { text: "Tengo activa una clave dinámica o un token.", tooltip: "El uso de claves dinámicas o tokens añade una capa adicional de seguridad en las transacciones financieras." },
+        { text: "Verifico la legitimidad de las plataformas de pago y comercios electrónicos.", tooltip: "Comprar solo en plataformas legítimas reduce el riesgo de fraudes y robos de información." },
+        { text: "Protejo la información de mi tarjeta cuando realizo pagos en algún comercio.", tooltip: "Proteger los datos de la tarjeta evita que sean interceptados durante las transacciones." },
+        { text: "Reviso con regularidad los saldos de mis cuentas.", tooltip: "Monitorear el saldo ayuda a identificar transacciones no autorizadas rápidamente." },
+        { text: "Evito hacer transacciones financieras en redes públicas.", tooltip: "Las redes públicas pueden ser vulnerables a ataques, comprometiendo la seguridad de sus datos financieros." },
+        { text: "Desactivo servicios o configuraciones de auto-completar en aplicaciones financieras.", tooltip: "Desactivar el autocompletado evita que información sensible sea introducida automáticamente en lugares inseguros." },
       ],
     },
     {
       title: 'Otras Amenazas latentes',
       description: 'Muchos ataques cibernéticos ocurren debido a errores humanos. Estas preguntas lo ayudarán a evaluar su nivel de riesgo personal.',
       questions: [
-        { text: "Protejo mis datos personales al revisar el consentimiento otorgado a aplicaciones y servicios", tooltip: "Revisar los consentimientos otorgados evita que aplicaciones recolecten más información de la necesaria." },
-        { text: "Realizo una revisión periódica de las configuraciones de privacidad y seguridad en mis aplicaciones y dispositivos", tooltip: "Revisar las configuraciones de privacidad asegura que sus datos estén bien protegidos." },
+        { text: "Protejo mis datos personales al revisar el consentimiento otorgado a aplicaciones y servicios.", tooltip: "Revisar los consentimientos otorgados evita que aplicaciones recolecten más información de la necesaria." },
+        { text: "Realizo una revisión periódica de las configuraciones de privacidad y seguridad en mis aplicaciones y dispositivos.", tooltip: "Revisar las configuraciones de privacidad asegura que sus datos estén bien protegidos." },
         { text: "Entiendo qué es y evito ser víctima del shoulder surfing.", tooltip: "El shoulder surfing es cuando alguien observa su pantalla sin su conocimiento para obtener información confidencial." },
-        { text: "Entiendo qué son y estoy alerta ante ataques de phishing", tooltip: "Los ataques de phishing buscan engañarlo para que comparta datos sensibles o descargue malware." },
-        { text: "Entiendo qué es y estoy alerta al stalkerware", tooltip: "El stalkerware es software diseñado para espiar sus actividades sin su consentimiento." },
-        { text: "Entiendo qué es y estoy alerta al malware", tooltip: "El malware puede comprometer sus dispositivos, robar información o controlar sus sistemas sin su permiso." },
-        { text: "Estoy alerta de los ataques de ransomware", tooltip: "El ransomware cifra sus archivos y pide un rescate para devolver el acceso, por lo que es importante protegerse." },
-        { text: "Entiendo qué son y estoy alerta ante estafas de soporte técnico y/o vishing", tooltip: "Las estafas de soporte técnico buscan engañar para robar datos o instalar malware mediante llamadas fraudulentas." },
-        { text: "Entiendo qué son y estoy alerta de los ataques de ingeniería social", tooltip: "La ingeniería social manipula a las personas para que divulguen información confidencial o realicen acciones peligrosas." },
+        { text: "Entiendo qué son y estoy alerta ante ataques de phishing.", tooltip: "Los ataques de phishing buscan engañarlo para que comparta datos sensibles o descargue malware." },
+        { text: "Entiendo qué es y estoy alerta al stalkerware.", tooltip: "El stalkerware es software diseñado para espiar sus actividades sin su consentimiento." },
+        { text: "Entiendo qué es y estoy alerta al malware.", tooltip: "El malware puede comprometer sus dispositivos, robar información o controlar sus sistemas sin su permiso." },
+        { text: "Estoy alerta de los ataques de ransomware.", tooltip: "El ransomware cifra sus archivos y pide un rescate para devolver el acceso, por lo que es importante protegerse." },
+        { text: "Entiendo qué son y estoy alerta ante estafas de soporte técnico y/o vishing.", tooltip: "Las estafas de soporte técnico buscan engañar para robar datos o instalar malware mediante llamadas fraudulentas." },
+        { text: "Entiendo qué son y estoy alerta de los ataques de ingeniería social.", tooltip: "La ingeniería social manipula a las personas para que divulguen información confidencial o realicen acciones peligrosas." },
       ],
     },
   ];
@@ -298,7 +298,7 @@ const Autodiagnostico: React.FC = () => {
         setShowAlert(true);
         setEmailError(''); // Resetear el error del correo si faltan otros campos
       } else if (!validarCorreo(email)) { // Validar el formato del correo
-        setEmailError('Por favor ingrese un correo institucional válido.');
+        setEmailError('Por favor ingrese un correo del distrito válido.');
         setShowAlert(false); // Ocultar otras alertas
       } else {
         setEmailError(''); // No hay error, limpiar mensaje
@@ -484,7 +484,7 @@ const Autodiagnostico: React.FC = () => {
             Desarrollado por Alejandro Salgar  - alejandro.salgar@medellin.gov.co
           </Typography>
           <Typography variant="body2" paragraph>
-            Supervisado por Jorge Iván Brand Ortíz - Subsecretaria de Tesoreria - Secretaria de Hacienda
+            Supervisado por Jorge Iván Brand Ortíz Ph.D - Subsecretaria de Tesoreria - Secretaria de Hacienda
           </Typography>
           <Typography variant="body2" paragraph>
             Asesoria conceptual por Javier Durán - javier.duran@medellin.gov.co
@@ -494,7 +494,7 @@ const Autodiagnostico: React.FC = () => {
 
           {/* Sección para pedir el nombre y apellido */}
           <Typography variant="h4" gutterBottom>
-            Ingrese su Nombre y Apellido
+            Ingrese su Nombre, Apellido y Correo del distrito 
           </Typography>
           <TextField
             label="Nombre"
@@ -513,7 +513,7 @@ const Autodiagnostico: React.FC = () => {
             size="small"
           />
           <TextField
-            label="Correo Institucional"
+            label="Correo del distrito"
             fullWidth
             margin="normal"
             value={email}
@@ -541,15 +541,15 @@ const Autodiagnostico: React.FC = () => {
               Seleccione una unidad
             </MenuItem>
             <MenuItem value="Control y riesgos">Control y riesgos</MenuItem>
-            <MenuItem value="Inversiones">inversiones</MenuItem>
-            <MenuItem value="Caja">caja</MenuItem>
+            <MenuItem value="Inversiones">Inversiones</MenuItem>
+            <MenuItem value="Caja">Caja</MenuItem>
             <MenuItem value="Caja - pagos">Caja - pagos</MenuItem>
             <MenuItem value="Caja - recaudos">Caja - recaudos</MenuItem>
             <MenuItem value="Cobranza - coactivo">Cobranza - coactivo</MenuItem>
-            <MenuItem value="Cobranza - fp">Cobranza - fp</MenuItem>
-            <MenuItem value="Cobranza - concursales">cobranza - concursales</MenuItem>
-            <MenuItem value="Cobranza - persuasivo">cobranza - persuasivo</MenuItem>
-            <MenuItem value="Despacho">Despacho</MenuItem>
+            <MenuItem value="Cobranza - fp">Cobranza - facilidades de pago</MenuItem>
+            <MenuItem value="Cobranza - concursales">Cobranza - concursales</MenuItem>
+            <MenuItem value="Cobranza - persuasivo">Cobranza - persuasivo</MenuItem>
+            <MenuItem value="Despacho">Despacho subsecretaria</MenuItem>
           </Select>
           {showAlert && (
             <Alert severity="warning" onClose={() => setShowAlert(false)}>
