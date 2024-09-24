@@ -134,7 +134,9 @@ const Autodiagnostico: React.FC = () => {
   const sections = [
     {
       title: 'Autenticación',
-      description: 'La mayoría de las violaciones de datos reportadas se deben al uso de contraseñas débiles, predeterminadas o robadas. Utilice contraseñas largas, seguras y únicas, adminístrelas en un administrador de contraseñas seguro, habilite la autenticación de dos factores.',
+      description: ['La mayoría de las violaciones de datos reportadas se deben al uso de contraseñas débiles, predeterminadas o robadas. Utilice contraseñas largas, seguras y únicas, adminístrelas en un administrador de contraseñas seguro, habilite la autenticación de dos factores.\nA continuacion marque las estrategias que usted utiliza al momento de crear sus contraseñas',
+        'A continuacion marque las estrategias que usted utiliza.'
+      ],
       questions: [
         { text: "Establezco contraseñas seguras de mínimo 9 caracteres que incorporan mayúsculas, minúsculas, números y caracteres especiales.", tooltip: "Establecer contraseñas con estos requisitos dificulta su descifrado por atacantes." },
         { text: "Cuando están disponibles, habilito los métodos de doble factor de autenticación, reconocimiento facial o huella.", tooltip: "Estos métodos añaden una capa adicional de seguridad, evitando accesos no autorizados." },
@@ -147,7 +149,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Navegación Web',
-      description: 'La mayoría de los sitios web utilizan algún tipo de seguimiento, lo que puede comprometer la privacidad. Es importante ser consciente de la seguridad al navegar por Internet.',
+      description: ['La mayoría de los sitios web utilizan algún tipo de seguimiento, lo que puede comprometer la privacidad. Es importante ser consciente de la seguridad al navegar por Internet.',
+        'A continuacion marque las estrategias que usted utiliza.'
+      ],
       questions: [
         { text: "Compruebo que los sitios sean legítimos y usen HTTPS.", tooltip: "HTTPS asegura la conexión cifrada entre el navegador y el servidor, protegiendo la información." },
         { text: "Prefiero digitar la URL de las aplicaciones web en lugar de encontrarlas en un motor de búsqueda.", tooltip: "Escribir directamente la URL reduce el riesgo de caer en sitios web fraudulentos." },
@@ -161,7 +165,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Correo electrónico',
-      description: 'La seguridad del correo electrónico es esencial para proteger otras cuentas asociadas. Un correo electrónico comprometido puede permitir acceso no autorizado a múltiples servicios.',
+      description: ['La seguridad del correo electrónico es esencial para proteger otras cuentas asociadas. Un correo electrónico comprometido puede permitir acceso no autorizado a múltiples servicios.',
+        "A continuacion marque las estrategias que usted utiliza."
+      ],
       questions: [
         { text: "Verifico la autenticidad de los remitentes antes de responder o proporcionar información confidencial.", tooltip: "Verificar el remitente ayuda a evitar ataques de phishing." },
         { text: "Evito hacer clic en enlaces sospechosos o descargar archivos de correos electrónicos de dudosa procedencia.", tooltip: "Enlaces y archivos en correos no solicitados pueden contener malware o estafas." },
@@ -172,6 +178,7 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Aplicaciones de mensajería',
+      description: 'A continuacion marque las estrategias que usted utiliza.',
       questions: [
         { text: "Utilizo una plataforma de mensajería de buena reputación.", tooltip: "El cifrado de extremo a extremo protege sus mensajes contra accesos no autorizados." },
         { text: "Evito dejar abiertas sesiones de mis servicios de mensajería en dispositivos de uso compartido.", tooltip: "Cerrar sesiones en dispositivos compartidos evita accesos no deseados." },
@@ -184,7 +191,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Redes Sociales',
-      description: 'Es importante proteger la información personal en redes sociales configurando adecuadamente la privacidad y siendo consciente de lo que se comparte.',
+      description: ['Es importante proteger la información personal en redes sociales configurando adecuadamente la privacidad y siendo consciente de lo que se comparte.',
+        'A continuacion marque las estrategias que usted utiliza'
+      ],
       questions: [
         { text: "Mantengo conciencia del alcance público o privado de mis publicaciones.", tooltip: "Ajustar la privacidad de sus publicaciones ayuda a proteger su información." },
         { text: "Evito revelar demasiado de mi vida o datos personales como teléfono y correo electrónico.", tooltip: "Compartir demasiada información puede ser aprovechado por ciberdelincuentes." },
@@ -195,7 +204,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Dispositivos Móviles',
-      description: 'Los dispositivos móviles generan una gran cantidad de datos, por lo que es fundamental protegerlos adecuadamente.',
+      description: ['Los dispositivos móviles generan una gran cantidad de datos, por lo que es fundamental protegerlos adecuadamente.',
+        'A continuacion marque las estrategias que usted utiliza'
+      ],
       questions: [
         { text: "Configuro opciones para localización del teléfono ante robo o hurto.", tooltip: "Configurar opciones de localización facilita recuperar el dispositivo en caso de pérdida o robo." },
         { text: "Elimino aplicaciones que ya no utilizo para reducir el riesgo de vulnerabilidades.", tooltip: "Eliminar aplicaciones no utilizadas minimiza posibles vectores de ataque." },
@@ -208,7 +219,8 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Equipos de cómputo',
-      description: 'Es crucial mantener su sistema operativo y aplicaciones actualizadas, además de implementar prácticas de seguridad adicionales como el cifrado y copias de seguridad.',
+      description: ['Es crucial mantener su sistema operativo y aplicaciones actualizadas, además de implementar prácticas de seguridad adicionales como el cifrado y copias de seguridad.',
+        'A continuacion marque las estrategias que usted utiliza'],
       questions: [
         { text: "Promuevo que mi sistema operativo esté actualizado.", tooltip: "Mantener el sistema operativo actualizado protege contra vulnerabilidades conocidas." },
         { text: "Me intereso por tener el cifrado de disco duro habilitado.", tooltip: "El cifrado de disco asegura que los datos no puedan ser leídos sin autorización." },
@@ -223,7 +235,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Dispositivos Domóticos',
-      description: 'Los dispositivos conectados a Internet en su hogar pueden comprometer su privacidad si no se configuran adecuadamente.',
+      description: ['Los dispositivos conectados a Internet en su hogar pueden comprometer su privacidad si no se configuran adecuadamente.',
+        'A continuacion marque las estrategias que usted utiliza'
+      ],
       questions: [
         { text: "Cambio el nombre de los dispositivos por un nombre que no revele información personal o marcas/modelos.", tooltip: "Renombrar dispositivos dificulta que sean identificados y atacados fácilmente." },
         { text: "Comprendo qué datos se recopilan, almacenan y transmiten en los dispositivos inteligentes que utilizo.", tooltip: "Entender la recopilación de datos ayuda a proteger su privacidad y evitar abusos." },
@@ -234,7 +248,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Buenas prácticas financieras',
-      description: 'Proteger sus finanzas en línea es esencial para evitar fraudes y robos de identidad.',
+      description: ['Proteger sus finanzas en línea es esencial para evitar fraudes y robos de identidad.',
+        'A continuacion marque las estrategias que usted utiliza'
+      ],
       questions: [
         { text: "Tengo activas y estoy atento a las notificaciones sobre mis movimientos y transacciones.", tooltip: "Recibir notificaciones en tiempo real permite detectar rápidamente actividades sospechosas." },
         { text: "Tengo activa una clave dinámica o un token.", tooltip: "El uso de claves dinámicas o tokens añade una capa adicional de seguridad en las transacciones financieras." },
@@ -247,7 +263,9 @@ const Autodiagnostico: React.FC = () => {
     },
     {
       title: 'Otras Amenazas latentes',
-      description: 'Muchos ataques cibernéticos ocurren debido a errores humanos. Estas preguntas lo ayudarán a evaluar su nivel de riesgo personal.',
+      description: ['Muchos ataques cibernéticos ocurren debido a errores humanos. Estas preguntas lo ayudarán a evaluar su nivel de riesgo personal.',
+        'A continuacion marque las estrategias que usted utiliza'
+      ],
       questions: [
         { text: "Protejo mis datos personales al revisar el consentimiento otorgado a aplicaciones y servicios.", tooltip: "Revisar los consentimientos otorgados evita que aplicaciones recolecten más información de la necesaria." },
         { text: "Realizo una revisión periódica de las configuraciones de privacidad y seguridad en mis aplicaciones y dispositivos.", tooltip: "Revisar las configuraciones de privacidad asegura que sus datos estén bien protegidos." },
@@ -612,9 +630,18 @@ const Autodiagnostico: React.FC = () => {
           <Typography variant="h4" gutterBottom style={{ marginTop: '20px' }}>
             {sections[currentSection].title}
           </Typography>
-          <Typography variant="body2" gutterBottom>
-            {sections[currentSection].description}
-          </Typography>
+
+          {Array.isArray(sections[currentSection].description) ? (
+            sections[currentSection].description.map((line, index) => (
+              <Typography key={index} variant="body2" gutterBottom>
+                {line}
+              </Typography>
+            ))
+          ) : (
+            <Typography variant="body2" gutterBottom>
+              {sections[currentSection].description}
+            </Typography>
+          )}
 
           {/* Contenedor en formato de grid para preguntas y respuestas */}
           <Box display="grid" gridTemplateColumns="1fr" gap={2}>
