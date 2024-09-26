@@ -76,7 +76,7 @@ const recomendacionesPorPregunta: { [key: string]: Recomendacion[] } = {
     { texto: "Realiza auditorías regulares de permisos y accesos a tus archivos y carpetas para asegurar que solo usuarios autorizados puedan acceder a ellos.", categoria: "https://www.veracrypt.fr/en/Home.html" },
 
   ],
-  "Dispositivos Domóticos": [
+  "Dispositivos Domóticos_edit": [
     { texto: "Cambia el nombre de tus dispositivos a uno que no revele información personal o detalles sobre marcas o modelos para proteger tu privacidad.", categoria: "https://www.home-assistant.io/" },
     { texto: "Entiende qué datos se recopilan, almacenan y transmiten en tus dispositivos inteligentes para gestionar mejor tu información.", categoria: "https://www.openhab.org/" },
     { texto: "Configura las opciones de privacidad para no compartir datos con terceros y proteger tu información personal.", categoria: "https://www.openhab.org/" },
@@ -173,7 +173,7 @@ const Autodiagnostico: React.FC = () => {
         { text: "Evito hacer clic en enlaces sospechosos o descargar archivos de correos electrónicos de dudosa procedencia.", tooltip: "Enlaces y archivos en correos no solicitados pueden contener malware o estafas." },
         { text: "Verifico y autorizo actualizaciones de mi software de correo electrónico para protegerme contra vulnerabilidades.", tooltip: "Mantener el software actualizado ayuda a prevenir vulnerabilidades." },
         { text: "Marco como spam a aquellos correos electrónicos que incluyen contenido inapropiado o de dudosa procedencia.", tooltip: "Marcar como spam reduce la exposición a correos maliciosos o no deseados." },
-        { text: "Verifico los destinatarios de mis correos electrónicos antes de enviar con información confidencial.", tooltip: "Revisar los destinatarios evita enviar información sensible a personas equivocadas." },
+        { text: "Verifico los destinatarios de mis correos electrónicos antes de enviar información confidencial.", tooltip: "Revisar los destinatarios evita enviar información sensible a personas equivocadas." },
       ],
     },
     {
@@ -344,14 +344,16 @@ const Autodiagnostico: React.FC = () => {
   };
 
   const calculateResults = () => {
-    return sections.map((section, secIndex) => {
-      const score = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
-      return {
-        subject: section.title,
-        A: score,
-        fullMark: section.questions.length,
-      };
-    });
+    return sections
+      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
+      .map((section, secIndex) => {
+        const score = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
+        return {
+          subject: section.title,
+          A: score,
+          fullMark: section.questions.length,
+        };
+      });
   };
 
   const handleSectionSelect = (event: React.SyntheticEvent, newValue: number) => {
@@ -364,18 +366,21 @@ const Autodiagnostico: React.FC = () => {
   };
 
   const calculatePercentages = () => {
-    return sections.map((section, secIndex) => {
-      const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
-      const totalQuestions = section.questions.length;
-      const percentage = (correctAnswers / totalQuestions) * 100;
+    return sections
+      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
+      .map((section, secIndex) => {
+        const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
+        const totalQuestions = section.questions.length;
+        const percentage = (correctAnswers / totalQuestions) * 100;
   
-      return {
-        section: section.title,
-        percentage: percentage.toFixed(2),
-        correctAnswers,
-        totalQuestions,
-      };
-    }).sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage)); // Ordena de mayor a menor porcentaje
+        return {
+          section: section.title,
+          percentage: percentage.toFixed(2),
+          correctAnswers,
+          totalQuestions,
+        };
+      })
+      .sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage)); // Ordena de mayor a menor porcentaje
   };
 
   const obtenerRecomendaciones = () => {
@@ -417,8 +422,15 @@ const Autodiagnostico: React.FC = () => {
   
 
   const calculateMeanPercentage = () => {
-    const percentages = calculatePercentages();
-    const totalPercentage = percentages.reduce((acc, item) => acc + parseFloat(item.percentage), 0);
+    const percentages = sections
+      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
+      .map((section, secIndex) => {
+        const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
+        const totalQuestions = section.questions.length;
+        return (correctAnswers / totalQuestions) * 100;
+      });
+  
+    const totalPercentage = percentages.reduce((acc, item) => acc + item, 0);
     return totalPercentage / percentages.length;
   };
   
@@ -511,7 +523,7 @@ const Autodiagnostico: React.FC = () => {
           
 
           {/* Sección para pedir el nombre y apellido */}
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Ingrese su Nombre, Apellido y Correo del distrito 
           </Typography>
           <TextField
@@ -545,7 +557,7 @@ const Autodiagnostico: React.FC = () => {
               Por favor, ingrese su nombre y apellido para continuar.
             </Alert>
           )}
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Seleccione la unidad a la que pertenece 
           </Typography>
           <Select
@@ -703,7 +715,7 @@ const Autodiagnostico: React.FC = () => {
               <Radar name="Puntuación" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
             </RadarChart>
           </ResponsiveContainer>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h5" gutterBottom>
             Porcentaje de respuestas correctas
           </Typography>
           <ResponsiveContainer width="100%" height={350}>
@@ -766,6 +778,14 @@ const Autodiagnostico: React.FC = () => {
             style={{ marginTop: '20px', marginLeft: '10px' }}
           >
             Descargar Resultados en PDF
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => window.location.reload()}  // Recargar la página
+            style={{ marginTop: '20px', marginLeft: '10px' }}
+          >
+            Realizar otro diagnóstico
           </Button>
         </Box>
       )}
