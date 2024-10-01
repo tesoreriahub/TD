@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Checkbox, Container, FormControlLabel, MenuItem, Select, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, MenuItem, Select, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import React, { useRef, useState } from 'react';
@@ -289,6 +289,8 @@ const Autodiagnostico: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(-1); // -1 es el estado inicial para pedir nombre y apellido
   const [showResults, setShowResults] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showConsentPopup, setShowConsentPopup] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(false);
 
 
   const resultRef = useRef<HTMLDivElement>(null); // Ref para capturar la sección de resultados
@@ -311,6 +313,11 @@ const Autodiagnostico: React.FC = () => {
   };
 
   const handleNextSection = () => {
+    if (!consentGiven && currentSection === -1) {
+      // Mostrar el pop-up si aún no ha aceptado
+      setShowConsentPopup(true);
+      return;
+    }
     if (currentSection === -1) {
       if (name === '' || surname === '' || unidad === '' || email === '') {
         setShowAlert(true);
@@ -336,6 +343,12 @@ const Autodiagnostico: React.FC = () => {
       }
     }
   };
+
+  const handleAcceptConsent = () => {
+    setConsentGiven(true);
+    setShowConsentPopup(false);
+    handleNextSection(); // Continuar a la siguiente sección
+};
 
   const handlePrevSection = () => {
     if (currentSection > 0) {
@@ -595,6 +608,27 @@ const Autodiagnostico: React.FC = () => {
           >
             Comenzar Encuesta
           </Button>
+          <Dialog
+      open={showConsentPopup}
+      onClose={() => setShowConsentPopup(false)}
+      aria-labelledby="habeas-data-dialog-title"
+      aria-describedby="habeas-data-dialog-description"
+    >
+      <DialogTitle id="habeas-data-dialog-title">Consentimiento de Habeas Data</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="habeas-data-dialog-description">
+          Para el ejercicio del Habeas Data, el titular del dato personal o quien demuestre un legítimo interés conforme lo señalado en la normatividad vigente, podrá hacerlo a través del siguiente correo electrónico juliana.saldarriaga@medellin.gov.co.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setShowConsentPopup(false)} color="secondary">
+          Rechazar
+        </Button>
+        <Button onClick={handleAcceptConsent} color="primary" autoFocus>
+          Aceptar
+        </Button>
+      </DialogActions>
+    </Dialog>
             <Typography variant="h6">Referencias</Typography>
             
             <Typography variant="body2" paragraph>
