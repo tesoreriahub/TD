@@ -76,7 +76,7 @@ const recomendacionesPorPregunta: { [key: string]: Recomendacion[] } = {
     { texto: "Realiza auditorías regulares de permisos y accesos a tus archivos y carpetas para asegurar que solo usuarios autorizados puedan acceder a ellos.", categoria: "https://www.veracrypt.fr/en/Home.html" },
 
   ],
-  "Dispositivos Domóticos_edit": [
+  "Dispositivos Domóticos": [
     { texto: "Cambia el nombre de tus dispositivos a uno que no revele información personal o detalles sobre marcas o modelos para proteger tu privacidad.", categoria: "https://www.home-assistant.io/" },
     { texto: "Entiende qué datos se recopilan, almacenan y transmiten en tus dispositivos inteligentes para gestionar mejor tu información.", categoria: "https://www.openhab.org/" },
     { texto: "Configura las opciones de privacidad para no compartir datos con terceros y proteger tu información personal.", categoria: "https://www.openhab.org/" },
@@ -358,7 +358,6 @@ const Autodiagnostico: React.FC = () => {
 
   const calculateResults = () => {
     return sections
-      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
       .map((section, secIndex) => {
         const score = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
         return {
@@ -380,7 +379,6 @@ const Autodiagnostico: React.FC = () => {
 
   const calculatePercentages = () => {
     return sections
-      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
       .map((section, secIndex) => {
         const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
         const totalQuestions = section.questions.length;
@@ -436,7 +434,6 @@ const Autodiagnostico: React.FC = () => {
 
   const calculateMeanPercentage = () => {
     const percentages = sections
-      .filter(section => section.title !== 'Dispositivos Domóticos') // Excluir Domótica
       .map((section, secIndex) => {
         const correctAnswers = answers[secIndex].reduce((acc, answer) => (answer ? acc + 1 : acc), 0);
         const totalQuestions = section.questions.length;
