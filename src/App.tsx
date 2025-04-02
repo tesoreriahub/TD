@@ -4,7 +4,6 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Autodiagnostico from './pages/Autodiagnostico';
-import GestionConocimiento from './pages/GestionConocimiento';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -19,14 +18,6 @@ const App: React.FC = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Autodiagnostico />} />
             <Route path="autodiagnostico" element={<Autodiagnostico />} />
-            <Route
-              path="gestion-conocimiento"
-              element={
-                <ProtectedRoute>
-                  <GestionConocimiento />
-                </ProtectedRoute>
-              }
-            />
           </Route>
         </Routes>
       </HashRouter>

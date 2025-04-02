@@ -41,18 +41,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleSidebar}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Desarrollos
-        </Typography>
-        {isAuthenticated ? (
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
-        ) : (
-          <Button color="inherit" onClick={() => setOpen(true)}>
-            Login
-          </Button>
-        )}
+        
       </Toolbar>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box
