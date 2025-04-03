@@ -115,7 +115,6 @@ export interface Question {
       { text: "¿Mantiene una comunicación constante con sus usuarios?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
       { text: "¿La Secretaria interactúa con sus usuarios para la definición y construcción de servicios, con el fin de entregar soluciones integrales?", tooltip: "", publico: ["directivos", "lideres"] },
       { text: "¿La Secretaria tiene en cuenta la retroalimentación de sus usuarios en la exploración y experimentación de nuevas ideas de servicios?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Tiene una buena relación con sus usuarios, contribuyendo a mantener fidelidad a largo plazo?", tooltip: "", publico: ["directivos", "lideres"] },
       { text: "¿Se actualiza mensualmente la base de datos suministrada por sus canales digitales (redes sociales, correo electrónico, sitio web, intranet) para mantener la información de sus usuarios actualizada?", tooltip: "", publico: ["lideres", "profesionales"] },
       { text: "¿La Secretaria invierte en pauta digital para posicionar la marca del distrito o incrementar recaudo o ingresos?", tooltip: "", publico: ["directivos", "lideres"] },
       { text: "¿La Secretaria cuenta con KPIs (medidores de rendimiento) definidos para la correcta implementación de pauta digital?", tooltip: "", publico: ["lideres", "profesionales"] },

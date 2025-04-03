@@ -24,10 +24,14 @@ import * as XLSX from 'xlsx';
 import { Question, Section, getSeccionesPorRol } from './preguntasData';
 
 // Función para generar el archivo Excel
-const generarExcel = (nombre: string, apellido: string, correo: string, preguntas: Question[], respuestas: boolean[], categorias: string[]): void => {
+const generarExcel = (nombre: string, apellido: string, correo: string, area: string, rol: string, preguntas: Question[], respuestas: boolean[], categorias: string[]): void => {
   // Crear una hoja de cálculo con preguntas y respuestas
   const data = preguntas.map((pregunta, index) => ({
+    Nombre: nombre,
+    Apellido: apellido,
     Correo: correo,
+    Rol: rol,
+    Area: area,
     Categoria: categorias[index],
     Pregunta: pregunta.text,
     Respuesta: respuestas[index] ? 'Sí' : 'No',
@@ -57,6 +61,7 @@ const Autodiagnostico: React.FC = () => {
   const [surname, setSurname] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>(''); 
+  const [area, setArea] = useState<string>('');
   
   // Estado para respuestas
   const [answers, setAnswers] = useState<boolean[][]>([]);
@@ -107,7 +112,7 @@ const Autodiagnostico: React.FC = () => {
     }
     
     if (currentSection === -1) {
-      if (name === '' || surname === '' || email === '' || rol === '') {
+      if (name === '' || surname === '' || email === '' || rol === '' || area === '') {
         setShowAlert(true);
         setEmailError('');
       } else if (!validarCorreo(email)) {
@@ -170,6 +175,7 @@ const Autodiagnostico: React.FC = () => {
     setName('');
     setSurname('');
     setEmail('');
+    setArea('');
     setRol('');
     setAnswers([]);
   };
@@ -246,6 +252,28 @@ const Autodiagnostico: React.FC = () => {
             <MenuItem value="lideres">Líder</MenuItem>
             <MenuItem value="profesionales">Profesional</MenuItem>
           </Select>
+
+          <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
+            Seleccione el área a la cual pertenece
+          </Typography>
+          <Select
+            value={area}
+            onChange={(e: SelectChangeEvent) => setArea(e.target.value)}
+            displayEmpty
+            fullWidth
+            required
+          >
+            <MenuItem value="" disabled>
+              Seleccione un área
+            </MenuItem>
+            <MenuItem value="Despacho Secretaria de Hacienda">Despacho Secretaria de Hacienda</MenuItem>
+            <MenuItem value="Subsecretaria de Ingresos">Subsecretaria de Ingresos</MenuItem>
+            <MenuItem value="Subsecretaria de Tesorería">Subsecretaria de Tesorería</MenuItem>
+            <MenuItem value="Subsecretaria de Presupuesto y Gestión Financiera">Subsecretaria de Presupuesto y Gestión Financiera</MenuItem>
+            <MenuItem value="Unidad de apoyo a la gestión jurídica">Unidad de apoyo a la gestión jurídica</MenuItem>
+            <MenuItem value="Unidad administrativa">Unidad administrativa</MenuItem>
+            <MenuItem value="Unidad de desarrollos tecnológicos">Unidad de desarrollos tecnológicos</MenuItem>
+          </Select>
           
           {showAlert && (
             <Alert severity="warning" onClose={() => setShowAlert(false)}>
@@ -311,6 +339,27 @@ const Autodiagnostico: React.FC = () => {
             </Typography>
             <Typography variant="body2" paragraph>
               Kaszás, N., Ernszt, I. y Jakab, B. (2023). Pojava organizacijskih i ljudskih čimbenika u modelima digitalne zrelosti. Management, 28(1), 123-135. https://doi.org/10.30924/mjcmi.28.1.8
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Li, L. (2022). Evaluación de la madurez de la transformación digital de pequeñas y medianas empresas emprendedoras basada en un marco multicriterio. Mathematical Problems in Engineering, 2022, 1-11. Español: https://doi.org/10.1155/2022/7085322
+            </Typography>
+            <Typography variant="body2" paragraph>
+              MERDİN, D., Ersöz, F. y Taşkın, H. (2023). Transformación digital: modelo de madurez digital para empresas turcas. Gazi University Journal of Science, 36(1), 263-282. https://doi.org/10.35378/gujs.982772
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Sari, D., Pratama, N. y Nurcahyo, R. (2023). Marco de madurez de la capacidad de transformación digital para la preparación para la auditoría digital en el sector público (estudio de caso). https://doi.org/10.46254/af04.20230109
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Teichert, R. (2023). Un modelo para evaluar la madurez de la transformación digital para organizaciones proveedoras de servicios. European Journal of Business Science and Technology, 9(2), 205-230. Español: https://doi.org/10.11118/ejobsat.2023.014
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Yezhebay, A., Sengirova, V., Igali, D., Abdallah, Y., & Shehab, E. (2021). Modelo de madurez y preparación digital para las pymes de Kazajstán. https://doi.org/10.1109/sist50301.2021.9465890
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Zaoui, F. y Souissi, N. (2022). Evaluación de la madurez digital: un estudio de caso. Journal of Computer Science, 18(8), 724-731. https://doi.org/10.3844/jcssp.2022.724.731
+            </Typography>
+            <Typography variant="body2" paragraph>
+              Červinka, T. (2023). Transformación digital de la gestión estratégica de las pymes en la República Checa. Revista de Ciencias de la Información y de la Organización, 47(2), 385-398. https://doi.org/10.31341/jios.47.2.8
             </Typography>
           </Box>
         </Box>
@@ -390,7 +439,7 @@ const Autodiagnostico: React.FC = () => {
       ) : (
         <Box>
           <Typography variant="h4" gutterBottom>
-            Gracias por completar el autodiagnóstico
+          Gracias por participar en el instrumento de medición de nivel de madurez de transformación digital de la Secretaria de Hacienda.
           </Typography>
           
           <Box display="flex" justifyContent="center" gap={2} marginTop={4}>
@@ -401,6 +450,8 @@ const Autodiagnostico: React.FC = () => {
                 name, 
                 surname, 
                 email,
+                area,
+                rol,
                 getAllQuestions(), 
                 getAllAnswers(),
                 getAllCategories()
@@ -414,7 +465,7 @@ const Autodiagnostico: React.FC = () => {
               color="secondary"
               onClick={handleReset}
             >
-              Realizar nuevo diagnóstico
+              Realizar nueva medición
             </Button>
           </Box>
         </Box>
