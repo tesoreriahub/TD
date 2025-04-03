@@ -5,6 +5,50 @@ export interface Question {
     publico: string[];
   }
   
+  // Definiciones de las secciones con descripciones detalladas
+  export const sectionDescriptions: Record<string, string[]> = {
+    "Análisis de Datos y Toma de Decisiones": [
+      "Este grupo se enfoca en la analítica de datos, incluyendo el uso de herramientas como SQL, NoSQL e inteligencia de negocios. Abarca la gestión, calidad y protección de datos, así como su uso para la toma de decisiones. También incluye la implementación de indicadores y la medición del desempeño organizacional basado en datos.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Colaboración Externa y Benchmarking": [
+      "Abarca las alianzas estratégicas con otras organizaciones, el desarrollo colaborativo de productos o servicios y la realización de benchmarking para mejorar procesos y servicios digitales, lo cual incluye procesos de vigilancia tecnológica.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Competencias Digitales y Gestión de Información": [
+      "Este grupo abarca las habilidades fundamentales para operar en el entorno digital, incluyendo la capacidad de identificar y gestionar información veraz, realizar búsquedas efectivas y utilizar herramientas de colaboración virtual. También incluye aspectos de comunicación digital y trabajo en equipo a través de medios virtuales, así como el uso efectivo de herramientas digitales para compartir conocimiento.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Estrategia y Modelo de Negocio Digital": [
+      "Este grupo evalúa la definición, implementación y socialización de la estrategia digital organizacional, incluyendo el modelo de negocio, la estructura de gobierno y los objetivos digitales. También abarca la alineación de la misión y visión con la estrategia digital y el liderazgo en la transformación digital.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Gestión de Relaciones Digitales": [
+      "Esta categoría comprende la gestión de relaciones profesionales y con el cliente interno y externo en el entorno digital. Incluye el uso de redes sociales profesionales, la gestión de la marca digital, la comunicación con los clientes, el seguimiento de prospectos y la implementación de estrategias de pauta digital. También abarca la medición del retorno de inversión en actividades de marketing digital y la gestión de la experiencia del cliente.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Infraestructura y Seguridad Tecnológica": [
+      "Este grupo evalúa la robustez de la infraestructura tecnológica actual, su capacidad para satisfacer necesidades internas y externas, y la implementación de medidas de seguridad digital. También incluye la evaluación de canales digitales y la experiencia del usuario interno y externo.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Liderazgo y Cultura Digital": [
+      "Esta categoría evalúa cómo los directivos y líderes adaptan sus estilos de gestión al entorno digital, promueven la innovación y el aprendizaje continuo, y fomentan una cultura organizacional abierta a la transformación digital. Incluye aspectos como el desarrollo del talento, la autonomía de los colaboradores y la implementación de programas formativos en habilidades digitales.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Metodologías Ágiles y Mejora Continua": [
+      "Abarca la implementación de prácticas ágiles en la organización, la gestión de mejoras continuas y la automatización de procesos. Incluye aspectos como la formación de equipos multidisciplinarios y ágiles, la experimentación con nuevos métodos de trabajo y la documentación de mejoras, esto último incluye las lecciones aprendidas.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Propiedad Intelectual y Cumplimiento Normativo Digital": [
+      "Esta categoría aborda el conocimiento y aplicación de normas de propiedad intelectual en medios digitales y tecnológicos, incluyendo licenciamiento y derechos de autor, así como el cumplimiento de regulaciones digitales.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ],
+    "Tecnología e Innovación Digital": [
+      "Esta categoría se centra en la implementación y gestión de nuevas tecnologías, incluyendo la planificación, presupuestación y medición del impacto de proyectos tecnológicos. También abarca la innovación digital y la adopción de tecnologías emergentes.",
+      "A continuación, marque las afirmaciones con las que se identifique."
+    ]
+  };
+  
   // Objeto con las preguntas clasificadas por categoría y público
   export const preguntasPorCategoria: Record<string, Question[]> = {
     "Análisis de Datos y Toma de Decisiones": [
@@ -138,52 +182,53 @@ export interface Question {
       { text: "¿Conoce el proceso para licenciar propiedad intelectual en medios digitales?", tooltip: "", publico: ["lideres", "profesionales"] },
       { text: "¿Conoce y cumple con la normativa de derechos de autor?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] }
     ],
-    "Tecnología e Innovación Digital": [
-      { text: "¿Tiene un plan de trabajo y/o estudio para integrar una nueva tecnología en la Secretaria?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
-      { text: "¿Tiene destinado un presupuesto para financiar los proyectos tecnológicos que se vayan a ejecutar en la Secretaria?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Cuenta con herramientas de medición que le ayuden a identificar la forma en que sus proyectos tecnológicos le están generando valor a sus usuarios?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Cuenta con un plan de trabajo definido donde se contemplen los proyectos tecnológicos que la Secretaria piensa ejecutar?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Tiene definidos espacios en los cuales sus colaboradores puedan construir nuevas ideas partiendo de las necesidades que los usuarios están demandando?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Se están implementando nuevos procesos para fomentar la innovación digital?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿La secretaria de hacienda utiliza tecnologías como redes sociales, webinars o videoconferencias y videocasts como parte de su estrategia innovadora?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
-      { text: "¿Se utilizan herramientas digitales como Office 365-Teams o redes sociales corporativas para el trabajo en grupo y en red?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
-      { text: "¿Se dispone de un modelo o marco de referencia para diagnosticar el estado de sus tecnologías?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Se realiza un análisis periódico del contexto para conocer, explorar y testear nuevas tecnologías emergentes como Blockchain, RV, RA, IoT entre otros?", tooltip: "", publico: ["lideres", "profesionales"] },
-      { text: "¿Se personaliza la comunicación digital con los usuarios basándose en su comportamiento y datos?", tooltip: "", publico: ["lideres", "profesionales"] }
-    ]
-  };
-  
-  // Función para obtener preguntas por categoría y rol
-  export const obtenerPreguntasPorRol = (categoria: string, rol: string): Question[] => {
-    const preguntasCategoria = preguntasPorCategoria[categoria] || [];
-    return preguntasCategoria.filter(pregunta => pregunta.publico.includes(rol));
-  };
-  
-  // Función para generar secciones por rol
-  export interface Section {
-    title: string;
-    description: string[];
-    questions: Question[];
-  }
-  
-  export const getSeccionesPorRol = (rolSeleccionado: string): Section[] => {
-    const secciones: Section[] = [];
     
-    // Para cada categoría en preguntasPorCategoria
-    Object.keys(preguntasPorCategoria).forEach(categoria => {
-      const preguntasFiltradas = obtenerPreguntasPorRol(categoria, rolSeleccionado);
-      
-      if (preguntasFiltradas.length > 0) {
-        secciones.push({
-          title: categoria,
-          description: [
-            `Evaluación sobre ${categoria}.`,
-            "A continuación, marque las afirmaciones con las que se identifique."
-          ],
-          questions: preguntasFiltradas
-        });
-      }
-    });
+"Tecnología e Innovación Digital": [
+    { text: "¿Tiene un plan de trabajo y/o estudio para integrar una nueva tecnología en la Secretaria?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
+    { text: "¿Tiene destinado un presupuesto para financiar los proyectos tecnológicos que se vayan a ejecutar en la Secretaria?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Cuenta con herramientas de medición que le ayuden a identificar la forma en que sus proyectos tecnológicos le están generando valor a sus usuarios?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Cuenta con un plan de trabajo definido donde se contemplen los proyectos tecnológicos que la Secretaria piensa ejecutar?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Tiene definidos espacios en los cuales sus colaboradores puedan construir nuevas ideas partiendo de las necesidades que los usuarios están demandando?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Se están implementando nuevos procesos para fomentar la innovación digital?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿La secretaria de hacienda utiliza tecnologías como redes sociales, webinars o videoconferencias y videocasts como parte de su estrategia innovadora?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
+    { text: "¿Se utilizan herramientas digitales como Office 365-Teams o redes sociales corporativas para el trabajo en grupo y en red?", tooltip: "", publico: ["directivos", "lideres", "profesionales"] },
+    { text: "¿Se dispone de un modelo o marco de referencia para diagnosticar el estado de sus tecnologías?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Se realiza un análisis periódico del contexto para conocer, explorar y testear nuevas tecnologías emergentes como Blockchain, RV, RA, IoT entre otros?", tooltip: "", publico: ["lideres", "profesionales"] },
+    { text: "¿Se personaliza la comunicación digital con los usuarios basándose en su comportamiento y datos?", tooltip: "", publico: ["lideres", "profesionales"] }
+  ]
+};
+
+// Función para obtener preguntas por categoría y rol
+export const obtenerPreguntasPorRol = (categoria: string, rol: string): Question[] => {
+  const preguntasCategoria = preguntasPorCategoria[categoria] || [];
+  return preguntasCategoria.filter(pregunta => pregunta.publico.includes(rol));
+};
+
+// Función para generar secciones por rol
+export interface Section {
+  title: string;
+  description: string[];
+  questions: Question[];
+}
+
+export const getSeccionesPorRol = (rolSeleccionado: string): Section[] => {
+  const secciones: Section[] = [];
+  
+  // Para cada categoría en preguntasPorCategoria
+  Object.keys(preguntasPorCategoria).forEach(categoria => {
+    const preguntasFiltradas = obtenerPreguntasPorRol(categoria, rolSeleccionado);
     
-    return secciones;
-  };
+    if (preguntasFiltradas.length > 0) {
+      secciones.push({
+        title: categoria,
+        description: sectionDescriptions[categoria] || [
+          `Evaluación sobre ${categoria}.`,
+          "A continuación, marque las afirmaciones con las que se identifique."
+        ],
+        questions: preguntasFiltradas
+      });
+    }
+  });
+  
+  return secciones;
+};
