@@ -250,7 +250,7 @@ const Autodiagnostico: React.FC = () => {
             </MenuItem>
             <MenuItem value="directivos">Directivo</MenuItem>
             <MenuItem value="lideres">Líder</MenuItem>
-            <MenuItem value="profesionales">Profesional</MenuItem>
+            <MenuItem value="profesionales">Profesional  - auxiliar - técnico - contratista</MenuItem>
           </Select>
 
           <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
