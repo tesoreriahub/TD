@@ -17,36 +17,39 @@ import {
   TextField, 
   Tooltip, 
   Typography,
-  SelectChangeEvent 
+  SelectChangeEvent,
+  CircularProgress 
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx';
 import { Question, Section, getSeccionesPorRol } from './preguntasData';
+import { db } from './../firebaseConfig';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
-// Función para generar el archivo Excel
-const generarExcel = (nombre: string, apellido: string, correo: string, area: string, rol: string, preguntas: Question[], respuestas: boolean[], categorias: string[]): void => {
-  // Crear una hoja de cálculo con preguntas y respuestas
-  const data = preguntas.map((pregunta, index) => ({
-    Nombre: nombre,
-    Apellido: apellido,
-    Correo: correo,
-    Rol: rol,
-    Area: area,
-    Categoria: categorias[index],
-    Pregunta: pregunta.text,
-    Respuesta: respuestas[index] ? 'Sí' : 'No',
-  }));
+// Función para guardar datos en Firebase
+const guardarEnFirebase = async (nombre: string, apellido: string, correo: string, area: string, rol: string, preguntas: Question[], respuestas: boolean[], categorias: string[]): Promise<string> => {
+  try {
+    // Crear objeto con los datos del usuario
+    const userData = {
+      nombre,
+      apellido,
+      correo,
+      area,
+      rol,
+      fechaCreacion: Timestamp.now(),
+      respuestas: preguntas.map((pregunta, index) => ({
+        categoria: categorias[index],
+        pregunta: pregunta.text,
+        respuesta: respuestas[index],
+      }))
+    };
 
-  // Crear un libro de Excel
-  const hoja = XLSX.utils.json_to_sheet(data);
-
-  // Crear el libro con la hoja
-  const libro = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(libro, hoja, 'Resultados');
-
-  // Generar archivo Excel y guardarlo
-  const nombreArchivo = `${nombre}_${apellido}.xlsx`;
-  XLSX.writeFile(libro, nombreArchivo);
+    // Guardar en Firestore
+    const docRef = await addDoc(collection(db, "autodiagnosticos"), userData);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error al guardar en Firebase:", error);
+    throw error;
+  }
 };
 
 const Autodiagnostico: React.FC = () => {
@@ -71,6 +74,12 @@ const Autodiagnostico: React.FC = () => {
   const [showConsentPopup, setShowConsentPopup] = useState<boolean>(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  
+  // Estados para Firebase
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [saveError, setSaveError] = useState<string>('');
+  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [documentId, setDocumentId] = useState<string>('');
 
   // Actualizar secciones cuando cambia el rol
   useEffect(() => {
@@ -127,6 +136,36 @@ const Autodiagnostico: React.FC = () => {
       setCurrentSection(currentSection + 1);
     } else {
       setCompleted(true);
+      
+      // Guardar automáticamente en Firebase cuando se completa
+      handleSaveToFirebase();
+    }
+  };
+
+  // Guardar datos en Firebase
+  const handleSaveToFirebase = async (): Promise<void> => {
+    setIsSaving(true);
+    setSaveError('');
+    
+    try {
+      const id = await guardarEnFirebase(
+        name,
+        surname,
+        email,
+        area,
+        rol,
+        getAllQuestions(),
+        getAllAnswers(),
+        getAllCategories()
+      );
+      
+      setDocumentId(id);
+      setSaveSuccess(true);
+      setIsSaving(false);
+    } catch (error) {
+      console.error("Error al guardar:", error);
+      setSaveError('Ocurrió un error al guardar los datos. Por favor intenta nuevamente.');
+      setIsSaving(false);
     }
   };
 
@@ -151,12 +190,12 @@ const Autodiagnostico: React.FC = () => {
     setCurrentSection(newValue);
   };
 
-  // Obtener todas las preguntas para generar el Excel
+  // Obtener todas las preguntas
   const getAllQuestions = (): Question[] => {
     return sections.flatMap(section => section.questions);
   };
 
-  // Obtener todas las respuestas para generar el Excel
+  // Obtener todas las respuestas
   const getAllAnswers = (): boolean[] => {
     return answers.flat();
   };
@@ -178,6 +217,9 @@ const Autodiagnostico: React.FC = () => {
     setArea('');
     setRol('');
     setAnswers([]);
+    setSaveSuccess(false);
+    setDocumentId('');
+    setSaveError('');
   };
 
   return (
@@ -250,7 +292,7 @@ const Autodiagnostico: React.FC = () => {
             </MenuItem>
             <MenuItem value="directivos">Directivo</MenuItem>
             <MenuItem value="lideres">Líder</MenuItem>
-            <MenuItem value="profesionales">Profesional  - auxiliar - técnico - contratista</MenuItem>
+            <MenuItem value="profesionales">Profesional - auxiliar - técnico - contratista</MenuItem>
           </Select>
 
           <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
@@ -390,26 +432,44 @@ const Autodiagnostico: React.FC = () => {
       ) : (
         <Box>
           <Typography variant="h4" gutterBottom>
-          Gracias por participar en el instrumento de medición de nivel de madurez de transformación digital de la Secretaria de Hacienda.
+            Gracias por participar en el instrumento de medición de nivel de madurez de transformación digital de la Secretaria de Hacienda.
           </Typography>
           
+          {isSaving && (
+            <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" marginY={4}>
+              <CircularProgress />
+              <Typography variant="body1" style={{ marginTop: '10px' }}>
+                Guardando sus respuestas...
+              </Typography>
+            </Box>
+          )}
+          
+          {saveError && (
+            <Alert severity="error" style={{ marginTop: '20px' }}>
+              {saveError}
+            </Alert>
+          )}
+          
+          {saveSuccess && (
+            <Alert severity="success" style={{ marginTop: '20px' }}>
+              Sus respuestas han sido guardadas exitosamente en nuestra base de datos. 
+              <Typography variant="body2" style={{ marginTop: '5px' }}>
+                ID de referencia: {documentId}
+              </Typography>
+            </Alert>
+          )}
+          
           <Box display="flex" justifyContent="center" gap={2} marginTop={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => generarExcel(
-                name, 
-                surname, 
-                email,
-                area,
-                rol,
-                getAllQuestions(), 
-                getAllAnswers(),
-                getAllCategories()
-              )}
-            >
-              Descargar Resultados en Excel
-            </Button>
+            {!saveSuccess && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveToFirebase}
+                disabled={isSaving}
+              >
+                Guardar Respuestas
+              </Button>
+            )}
             
             <Button
               variant="contained"
